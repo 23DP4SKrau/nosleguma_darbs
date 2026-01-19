@@ -4,44 +4,78 @@ import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="page">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <ul>
+        <li>Home</li>
+        <li>About Us</li>
+        <li>Contacts</li>
+      </ul>
+    </nav>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <!-- Hero section -->
+    <main class="hero">
+      <h1>HobiSpace</h1>
+      <p>Your space for hobbies & inspiration</p>
+    </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.page {
+  height: 100vh;
+  background: linear-gradient(135deg, #1d2671, #c33764);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+/* Navigation */
+.navbar {
+  position: absolute;
+  top: 20px;
+  left: 30px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  padding: 0;
+  margin: 0;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.navbar li {
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.85;
+  transition: opacity 0.3s;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.navbar li:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Hero section */
+.hero {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 80px;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.hero p {
+  font-size: 22px;
+  margin-top: 10px;
+  opacity: 0.9;
 }
 </style>
