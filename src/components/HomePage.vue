@@ -31,7 +31,7 @@
     // No additional logic needed for this static homepage
   </script>
   
-  <style scoped>
+  <style>
 /* General Reset */
 * {
   margin: 0;
@@ -102,10 +102,6 @@ body {
   padding: 2rem;
 }
 
-.hero-content {
-  max-width: 800px;
-}
-
 .hero-content h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
@@ -134,41 +130,14 @@ body {
   color: #ffcc00;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
-  }
-
-  .cta-button {
-    font-size: 0.9rem;
-  }
-
   .nav-links {
+    flex-direction: column;
     gap: 1rem;
   }
-}
-
-@media (min-width: 1024px) {
-  .navbar {
-    padding: 1rem 5rem;
-  }
 
   .hero-content h1 {
-    font-size: 4rem;
-  }
-
-  .hero-content p {
-    font-size: 1.5rem;
-  }
-
-  .cta-button {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
+    font-size: 2rem;
   }
 }
 </style>
