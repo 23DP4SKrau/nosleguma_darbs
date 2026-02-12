@@ -39,7 +39,7 @@ Responsīvs dizains (pielāgojas telefonam un datoram)
 ## Kā palaist mājaslapu?
 
 ### 1. Lejupielādē vai klonē repozitoriju
-### 2. Terminālī ievadīt
+### 2. Terminālī ievadi
 
 ```sh
 npm run dev
