@@ -1,8 +1,8 @@
-# HOBIJU MĀJASLAPA
+#** MANA HOBIJU MĀJASLAPA
 
-Vienkārša hobiju mājaslapa, kas izveidota, lai parādītu manas intereses, projektus un brīvā laika aktivitātes.
+Es izveidoju vienkāršu hobiju mājaslapu, tā tika izveidota priekš mana nosolēguma darba. Veidoju to arī, lai parādītu manas intereses, hobijus un brīvā laika aktivitātes, kā arī, lai tās lietotāji varētu to izmantot un iepazīties ar dažādiem hobijiem.
 
-## Par projektu
+##** Par projektu
 
 Šī mājaslapa ir izveidota kā personīgs projekts, lai:
 
@@ -12,21 +12,23 @@ prezentētu savus hobijus
 
 uzlabotu HTML, CSS un JavaScript prasmes
 
-## Izmantotās tehnoloģijas
+##** Izmantotās tehnoloģijas
 
-HTML5
+HTML
 
-CSS3
+CSS
 
 JavaScript
 
-(ja izmantoji – pievieno, piemēram: Bootstrap / React / PHP / u.c.)
+VUE
 
-# Funkcionalitāte
+Laravel
 
-Galvenā lapa ar īsu aprakstu
+##** Funkcionalitāte
 
-Sadaļa par maniem hobijiem
+Galvenā lapa ar īsu aprakstu un navigāciju + log in/sign up
+
+Sadaļa par visādiem hobijiem
 
 Attēlu galerija
 
@@ -34,20 +36,18 @@ Kontaktu forma
 
 Responsīvs dizains (pielāgojas telefonam un datoram)
 
-## Project Setup
+##** Kā palaist mājaslapu?
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
+### 1. Lejupielādē vai klonē repozitoriju
+### 2. Terminālī ievadīt
 
 ```sh
 npm run dev
 ```
+##** Kontakti
 
-### Compile and Minify for Production
+Ja vēlies sazināties:
 
-```sh
-npm run build
-```
+- E-pasts: a231147sk@rvt.lv
+
+- GitHub: https://github.com/23DP4SKrau
