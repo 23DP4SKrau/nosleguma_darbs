@@ -1,38 +1,53 @@
-# Noslēguma darbs
+# MANA HOBIJU MĀJASLAPA
 
-This template should help get you started developing with Vue 3 in Vite.
+Es izveidoju vienkāršu hobiju mājaslapu, tā tika izveidota priekš mana nosolēguma darba. Veidoju to arī, lai parādītu manas intereses, hobijus un brīvā laika aktivitātes, kā arī, lai tās lietotāji varētu to izmantot un iepazīties ar dažādiem hobijiem.
 
-## Recommended IDE Setup
+## Par projektu
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Šī mājaslapa ir izveidota kā personīgs projekts, lai:
 
-## Recommended Browser Setup
+praktizētu web izstrādi
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+prezentētu savus hobijus
 
-## Customize configuration
+uzlabotu HTML, CSS un JavaScript prasmes
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Izmantotās tehnoloģijas
 
-## Project Setup
+HTML
 
-```sh
-npm install
-```
+CSS
 
-### Compile and Hot-Reload for Development
+JavaScript
+
+VUE
+
+Laravel
+
+## Funkcionalitāte
+
+Galvenā lapa ar īsu aprakstu un navigāciju + log in/sign up
+
+Sadaļa par visādiem hobijiem
+
+Attēlu galerija
+
+Kontaktu forma
+
+Responsīvs dizains (pielāgojas telefonam un datoram)
+
+## Kā palaist mājaslapu?
+
+### 1. Lejupielādē vai klonē repozitoriju
+### 2. Terminālī ievadi
 
 ```sh
 npm run dev
 ```
+## Kontakti
 
-### Compile and Minify for Production
+Ja vēlies sazināties:
 
-```sh
-npm run build
-```
+- E-pasts: a231147sk@rvt.lv
+
+- GitHub: https://github.com/23DP4SKrau
