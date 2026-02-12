@@ -1,8 +1,8 @@
-#** MANA HOBIJU MĀJASLAPA
+# MANA HOBIJU MĀJASLAPA
 
 Es izveidoju vienkāršu hobiju mājaslapu, tā tika izveidota priekš mana nosolēguma darba. Veidoju to arī, lai parādītu manas intereses, hobijus un brīvā laika aktivitātes, kā arī, lai tās lietotāji varētu to izmantot un iepazīties ar dažādiem hobijiem.
 
-##** Par projektu
+## Par projektu
 
 Šī mājaslapa ir izveidota kā personīgs projekts, lai:
 
@@ -12,7 +12,7 @@ prezentētu savus hobijus
 
 uzlabotu HTML, CSS un JavaScript prasmes
 
-##** Izmantotās tehnoloģijas
+## Izmantotās tehnoloģijas
 
 HTML
 
@@ -24,7 +24,7 @@ VUE
 
 Laravel
 
-##** Funkcionalitāte
+## Funkcionalitāte
 
 Galvenā lapa ar īsu aprakstu un navigāciju + log in/sign up
 
@@ -36,7 +36,7 @@ Kontaktu forma
 
 Responsīvs dizains (pielāgojas telefonam un datoram)
 
-##** Kā palaist mājaslapu?
+## Kā palaist mājaslapu?
 
 ### 1. Lejupielādē vai klonē repozitoriju
 ### 2. Terminālī ievadīt
@@ -44,7 +44,7 @@ Responsīvs dizains (pielāgojas telefonam un datoram)
 ```sh
 npm run dev
 ```
-##** Kontakti
+## Kontakti
 
 Ja vēlies sazināties:
 
