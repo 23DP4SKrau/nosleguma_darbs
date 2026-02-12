@@ -50,4 +50,6 @@ Ja vēlies sazināties:
 
 - E-pasts: a231147sk@rvt.lv
 
+- Mobīlais tālrunis: +371 25128700
+
 - GitHub: https://github.com/23DP4SKrau
