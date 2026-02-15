@@ -22,8 +22,8 @@
     <input type="text" placeholder="Search hobbies..." class="search-bar" />
 
     <div class="auth-buttons">
-      <button class="login-btn">Log in</button>
-      <button class="signup-btn">Sign Up</button>
+      <button class="login-btn" @click="openLogin">Log in</button>
+<button class="signup-btn" @click="openSignup">Sign Up</button>
     </div>
   </div>
 </header>
@@ -56,6 +56,53 @@
       </ul>
     </div>
 
+    <!-- Auth Modal -->
+<div v-if="showAuth" class="auth-overlay" @click.self="closeAuth">
+  <div class="auth-modal">
+    <button class="close-btn" @click="closeAuth">×</button>
+
+    <h2>{{ isLogin ? 'Log In to HobiSpace' : 'Create an Account' }}</h2>
+
+    <form @submit.prevent="handleSubmit">
+      <div v-if="!isLogin" class="form-group">
+        <label>Full Name</label>
+        <input type="text" v-model="form.name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" v-model="form.email" required />
+      </div>
+
+      <div class="form-group password-group">
+  <label>Password</label>
+
+  <div class="password-wrapper">
+    <input 
+      :type="showPassword ? 'text' : 'password'" 
+      v-model="form.password" 
+      required 
+    />
+    <span class="eye-icon" @click="togglePassword">
+      {{ showPassword ? '⌣' : '👁' }}
+    </span>
+  </div>
+</div>
+
+      <button type="submit" class="auth-submit">
+        {{ isLogin ? 'Log In' : 'Sign Up' }}
+      </button>
+    </form>
+
+    <p class="switch-text">
+      {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+      <span @click="toggleAuth">
+        {{ isLogin ? "Sign Up" : "Log In" }}
+      </span>
+    </p>
+  </div>
+</div>
+
     <div class="footer-section">
       <h4>Follow Us</h4>
       <div class="social-icons">
@@ -73,5 +120,48 @@
 </footer>
   </template>
   
-  
+<script>
+export default {
+  data() {
+    return {
+      showAuth: false,
+      isLogin: true,
+      showPassword: false,  
+      form: {
+        name: '',
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    openLogin() {
+      this.isLogin = true
+      this.showAuth = true
+    },
+    openSignup() {
+      this.isLogin = false
+      this.showAuth = true
+    },
+    closeAuth() {
+      this.showAuth = false
+      this.showPassword = false  
+    },
+    toggleAuth() {
+      this.isLogin = !this.isLogin
+    },
+    togglePassword() {        
+      this.showPassword = !this.showPassword
+    },
+    handleSubmit() {
+      if (this.isLogin) {
+        alert("Logged in successfully!")
+      } else {
+        alert("Account created successfully!")
+      }
+      this.closeAuth()
+    }
+  }
+}
+</script>
   
