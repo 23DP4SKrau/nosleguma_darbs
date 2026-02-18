@@ -5,6 +5,13 @@ import HomePage from './components/HomePage.vue';
 </script>
 
 <template>
-  <HomePage />
-
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
+
+<script>
+export default {
+  name: "App",
+};
+</script>
