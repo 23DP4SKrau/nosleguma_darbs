@@ -28,9 +28,7 @@ Laravel
 
 Galvenā lapa ar īsu aprakstu un navigāciju + pieslēgšanās/reģistrācija
 
-Sadaļa par visādiem hobijiem
-
-Attēlu galerija
+Sadaļa par dažādiem hobijiem
 
 Kontaktu forma
 
