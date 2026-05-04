@@ -191,9 +191,9 @@ export default {
         password: ''
       },
       hobbies: [
-        { id: 1, name: 'Fotogrāfija', isFavorite: false, description: 'Fiksējiet mirkļus un veidojiet vizuālus stāstus ar katru kadru.' },
-        { id: 3, name: 'Skriešana', isFavorite: false, description: 'Veidojiet izturību un attīriet prātu ar katru jūdzi.' },
-        { id: 4, name: 'Dejošana',isFavorite: false, description: 'Kustieties pēc mūzikas un izsakiet savu enerģiju caur ritmu.' },
+        { id: 1, name: 'Fotogrāfēšana', isFavorite: false, description: 'Fiksējiet mirkļus un veidojiet vizuālus stāstus ar katru kadru.' },
+        { id: 3, name: 'Skriešana', isFavorite: false, description: 'Veidojiet izturību un attīriet prātu ar katru kilometru.' },
+        { id: 4, name: 'Dejošana',isFavorite: false, description: 'Kustieties pēc mūzikas un palaid savu enerģiju caur ritmu.' },
         { id: 5, name: 'Dziedāšana', isFavorite: false, description: 'Trenējiet melodijas, palieliniet savu pārliecību un atrodiet savu balsi.' },
         { id: 6, name: 'Šūšana', isFavorite: false, description: 'Dizainējiet un labojiet auduma projektus ar radošumu un prasmi.' },
         { id: 7, name: 'Lasīšana', isFavorite: false, description: 'Atklājiet stāstus, idejas un iedvesmu caur katru lapu.' },
@@ -204,10 +204,10 @@ export default {
         { id: 12, name: 'Peldēšana', isFavorite: false, description: 'Atpūtieties ūdenī, vienlaikus uzlabojot spēku un izturību.' },
         { id: 13, name: 'Mūzika', isFavorite: false, description: 'Mācīties instrumentus, sitienus un ritmus, kas kustina jūsu garu.' },
         { id: 14, name: 'Makšķerēšana', isFavorite: false, description: 'Baudiet mierīgu ezeru laiku un svaiga loma uztraukumu.' },
-        { id: 15, name: 'Spēlēšana', isFavorite: false, description: 'Spēlējiet stratēģijas, piedzīvojumu un sociālās spēles ar draugiem.' },
+        { id: 15, name: 'Videospēļu spēlēšana', isFavorite: false, description: 'Spēlējiet stratēģijas, piedzīvojumu un sociālās spēles ar draugiem.' },
         { id: 16, name: 'Ēdiena gatavošana', isFavorite: false, description: 'Veidojiet garšīgus ēdienus, eksperimentējiet ar receptēm un barojiet savu prieku.' },
         { id: 17, name: 'Cepšana', isFavorite: false, description: 'Samaisiet, cepiet un pasniedziet saldumus mājīgiem mirkļiem.' },
-        { id: 18, name: 'Rokdarbi', isFavorite: false, description: 'Veidojiet paštaisītus projektus, izmantojot materiālus, rīkus un iztēli.' }
+        { id: 18, name: 'Rokdarbi', isFavorite: false, description: 'Veidojiet paštaisītus rokdarbus, izmantojot savu iztēli.' }
       ]
     }
   },

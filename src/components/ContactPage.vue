@@ -38,16 +38,16 @@
       <div class="contact-container">
         <!-- Left Side -->
         <div class="contact-left">
-          <p class="collection-label">sazināties</p>
-          <h1>Runāsim par hobijiem</h1>
+          <p class="collection-label">sazināšanās</p>
+          <h1>Runājam par hobijiem</h1>
           <div class="contact-options">
             <div class="option">
-              <span class="option-icon">💭</span>
-              <p>Ieteikt hobiju</p>
+              <span class="option-icon"></span>
+              <p>Ziņo mums par neērtībām</p>
             </div>
             <div class="option">
-              <span class="option-icon">🎨</span>
-              <p>Dalīties ar savu darbu</p>
+              <span class="option-icon"></span>
+              <p>Dalies ar savu darbu</p>
             </div>
           </div>
         </div>
