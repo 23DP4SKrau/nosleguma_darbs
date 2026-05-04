@@ -8,7 +8,7 @@
       />
 
       <div class="mb-8 text-center">
-        <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+        <div class="text-body-2 font-weight-light mb-n1">Laipni lūdzam</div>
         <h1 class="text-h2 my-0 font-weight-bold">Vuetify</h1>
       </div>
 
@@ -28,13 +28,13 @@
 
             <template #title>
               <h2 class="text-h5 font-weight-bold">
-                Get started
+                Sākt darbu
               </h2>
             </template>
 
             <template #subtitle>
               <div class="text-subtitle-1">
-                Change this page by updating <v-kbd>{{ `<HelloWorld />` }}</v-kbd> in <v-kbd>components/HelloWorld.vue</v-kbd>.
+                Mainiet šo lapu, atjauninot <v-kbd>{{ `<HelloWorld />` }}</v-kbd> komponentēs/HelloWorld.vue.
               </div>
             </template>
           </v-card>
@@ -65,26 +65,26 @@
     {
       href: 'https://vuetifyjs.com/',
       icon: 'mdi-text-box-outline',
-      subtitle: 'Learn about all things Vuetify in our documentation.',
-      title: 'Documentation',
+      subtitle: 'Uzziniet par visu, kas saistīts ar Vuetify, mūsu dokumentācijā.',
+      title: 'Dokumentācija',
     },
     {
       href: 'https://vuetifyjs.com/introduction/why-vuetify/#feature-guides',
       icon: 'mdi-star-circle-outline',
-      subtitle: 'Explore available framework Features.',
-      title: 'Features',
+      subtitle: 'Izpētiet pieejamās ietvara funkcijas.',
+      title: 'Funkcijas',
     },
     {
       href: 'https://vuetifyjs.com/components/all',
       icon: 'mdi-widgets-outline',
-      subtitle: 'Discover components in the API Explorer.',
-      title: 'Components',
+      subtitle: 'Atklājiet komponentus API Explorer.',
+      title: 'Komponenti',
     },
     {
       href: 'https://discord.vuetifyjs.com',
       icon: 'mdi-account-group-outline',
-      subtitle: 'Connect with Vuetify developers.',
-      title: 'Community',
+      subtitle: 'Sazinieties ar Vuetify izstrādātājiem.',
+      title: 'Kopiena',
     },
   ]
 </script>

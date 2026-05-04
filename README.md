@@ -26,7 +26,7 @@ Laravel
 
 ## Funkcionalitāte
 
-Galvenā lapa ar īsu aprakstu un navigāciju + log in/sign up
+Galvenā lapa ar īsu aprakstu un navigāciju + pieslēgšanās/reģistrācija
 
 Sadaļa par visādiem hobijiem
 

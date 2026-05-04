@@ -4,26 +4,30 @@
       <header class="navbar">
   <div class="navbar-left">
     <div class="logo-container">
-      <img src="@/assets/logo.jpg" alt="HobiSpace Logo" class="logo" />
+      <img src="@/assets/logo.jpg" alt="HobiSpace logotips" class="logo" />
       <span class="project-name">HobiSpace</span>
     </div>
 
     <nav>
   <ul class="nav-links">
-    <li><router-link to="/">Home</router-link></li>
-    <li><router-link to="/about">About</router-link></li>
-    <li><router-link to="/hobbies">Hobbies</router-link></li>
-    <li><router-link to="/contact">Contacts</router-link></li>
+    <li><router-link to="/">Sākums</router-link></li>
+    <li><router-link to="/about">Par mums</router-link></li>
+    <li><router-link to="/hobbies">Hobiji</router-link></li>
+    <li><router-link to="/contact">Kontakti</router-link></li>
   </ul>
 </nav>
   </div>
 
   <div class="navbar-right">
-    <input type="text" placeholder="Search hobbies..." class="search-bar" />
-
+        <input 
+          type="text" 
+          v-model="searchQuery"
+          placeholder="Meklēt hobijus..." 
+          class="search-bar" 
+        />
     <div class="auth-buttons">
-      <button class="login-btn" @click="openLogin">Log in</button>
-<button class="signup-btn" @click="openSignup">Sign Up</button>
+      <button class="login-btn" @click="openLogin">Pieslēgties</button>
+<button class="signup-btn" @click="openSignup">Reģistrēties</button>
     </div>
   </div>
 </header>
@@ -31,9 +35,13 @@
       <!-- Hero Section -->
       <main class="hero">
         <div class="hero-content">
-          <h1>Welcome to HobiSpace</h1>
-          <p>Your ultimate destination for exploring hobbies and finding inspiration.</p>
-          <a href="#hobbies" class="cta-button">Explore Hobbies</a>
+          <p class="collection-label">ceļvedis tavam brīvajam laikam</p>
+          <h1>Laipni lūdzam HobiSpace</h1>
+          <p>Tava galvenā vieta hobiju izpētei un iedvesmas rašanai.</p>
+          <div class="cta-buttons-group">
+            <router-link to="/hobbies" class="cta-button primary-button">Izpētīt hobijus</router-link>
+            <router-link to="/about" class="cta-button secondary-button">Par mums</router-link>
+          </div>
         </div>
       </main>
     </div>
@@ -44,15 +52,15 @@
 
     <div class="footer-section">
       <h3>HobiSpace</h3>
-      <p>Explore hobbies. Discover passion. Connect with creativity.</p>
+      <p>Izpēti hobijus. Atklāj aizrautību. Savienojies ar radošumu.</p>
     </div>
 
     <div class="footer-section">
-      <h4>Legal</h4>
+      <h4>Resursi</h4>
       <ul>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Cookies Policy</a></li>
+        <li><a href="#">Pakalpojuma noteikumi</a></li>
+        <li><a href="#">Privātuma politika</a></li>
+        <li><a href="#">Sīkdatņu politika</a></li>
       </ul>
     </div>
 
@@ -61,21 +69,21 @@
   <div class="auth-modal">
     <button class="close-btn" @click="closeAuth">×</button>
 
-    <h2>{{ isLogin ? 'Log In to HobiSpace' : 'Create an Account' }}</h2>
+    <h2>{{ isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu' }}</h2>
 
     <form @submit.prevent="handleSubmit">
       <div v-if="!isLogin" class="form-group">
-        <label>Full Name</label>
+        <label>Pilns vārds</label>
         <input type="text" v-model="form.name" required />
       </div>
 
       <div class="form-group">
-        <label>Email</label>
+        <label>E-pasts</label>
         <input type="email" v-model="form.email" required />
       </div>
 
       <div class="form-group password-group">
-  <label>Password</label>
+  <label>Parole</label>
 
   <div class="password-wrapper">
     <input 
@@ -90,21 +98,21 @@
 </div>
 
       <button type="submit" class="auth-submit">
-        {{ isLogin ? 'Log In' : 'Sign Up' }}
+        {{ isLogin ? 'Pieslēgties' : 'Reģistrēties' }}
       </button>
     </form>
 
     <p class="switch-text">
-      {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+      {{ isLogin ? "Nav konta?" : "Jau ir konts?" }}
       <span @click="toggleAuth">
-        {{ isLogin ? "Sign Up" : "Log In" }}
+        {{ isLogin ? "Reģistrēties" : "Pieslēgties" }}
       </span>
     </p>
   </div>
 </div>
 
     <div class="footer-section">
-      <h4>Follow Us</h4>
+      <h4>Sekojiet mums</h4>
       <div class="social-icons">
         <a href="#">Instagram</a>
         <a href="#">YouTube</a>
@@ -115,7 +123,7 @@
   </div>
 
   <div class="footer-bottom">
-    <p>© {{ new Date().getFullYear() }} HobiSpace. All rights reserved.</p>
+    <p>© {{ new Date().getFullYear() }} HobiSpace. Visas tiesības aizsargātas.</p>
   </div>
 </footer>
   </template>
@@ -124,6 +132,7 @@
 export default {
   data() {
     return {
+      searchQuery: '',
       showAuth: false,
       isLogin: true,
       showPassword: false,  
@@ -155,9 +164,9 @@ export default {
     },
     handleSubmit() {
       if (this.isLogin) {
-        alert("Logged in successfully!")
+        alert("Pieslēgšanās veiksmīga!")
       } else {
-        alert("Account created successfully!")
+        alert("Konts izveidots veiksmīgi!")
       }
       this.closeAuth()
     }

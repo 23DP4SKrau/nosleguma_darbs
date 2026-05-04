@@ -14,36 +14,35 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     <template #icon>
       <DocumentationIcon />
     </template>
-    <template #heading>Documentation</template>
+    <template #heading>Dokumentācija</template>
 
     Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
+    <a href="https://vuejs.org/" target="_blank" rel="noopener">oficiālā dokumentācija</a>
+    sniedz jums visu nepieciešamo informāciju, lai sāktu darbu.
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
       <ToolingIcon />
     </template>
-    <template #heading>Tooling</template>
+    <template #heading>Rīki</template>
 
-    This project is served and bundled with
-    <a href="https://vite.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
+    Šis projekts tiek apkalpots un sapakots ar
+    <a href="https://vite.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. Ieteicamā IDE iestatīšana ir
     <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a>
     +
     <a href="https://github.com/vuejs/language-tools" target="_blank" rel="noopener"
       >Vue - Official</a
-    >. If you need to test your components and web pages, check out
+    >. Ja jums jāpārbauda komponenti un tīmekļa lapas, apskatiet
     <a href="https://vitest.dev/" target="_blank" rel="noopener">Vitest</a>
-    and
+    un
     <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a>
     /
     <a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright</a>.
 
     <br />
 
-    More instructions are available in
+    Vairāk instrukcijas ir pieejamas
     <a href="javascript:void(0)" @click="openReadmeInEditor"><code>README.md</code></a
     >.
   </WelcomeItem>
@@ -52,14 +51,13 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     <template #icon>
       <EcosystemIcon />
     </template>
-    <template #heading>Ecosystem</template>
+    <template #heading>Ekosistēma</template>
 
-    Get official tools and libraries for your project:
+    Iegūstiet oficiālos rīkus un bibliotēkas savam projektam:
     <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
     <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
+    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, un
+    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. Ja jums vajag vairāk resursu, mēs iesakām apmeklēt
     <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
     a visit.
   </WelcomeItem>
@@ -68,28 +66,28 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     <template #icon>
       <CommunityIcon />
     </template>
-    <template #heading>Community</template>
+    <template #heading>Kopiena</template>
 
-    Got stuck? Ask your question on
+    Iestrēdzāt? Uzdodiet savu jautājumu
     <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>
-    (our official Discord server), or
+    (mūsu oficiālajā Discord serverī), vai
     <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
       >StackOverflow</a
-    >. You should also follow the official
+    >. Jums vajadzētu arī sekot oficiālajam
     <a href="https://bsky.app/profile/vuejs.org" target="_blank" rel="noopener">@vuejs.org</a>
-    Bluesky account or the
+    Bluesky kontam vai
     <a href="https://x.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    X account for latest news in the Vue world.
+    X kontam jaunākajām ziņām Vue pasaulē.
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
       <SupportIcon />
     </template>
-    <template #heading>Support Vue</template>
+    <template #heading>Atbalstiet Vue</template>
 
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
+    Kā neatkarīgs projekts, Vue paļaujas uz kopienas atbalstu savai ilgtspējai. Jūs varat mums palīdzēt,
+    kļūstot par
+    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">sponsoru</a>.
   </WelcomeItem>
 </template>

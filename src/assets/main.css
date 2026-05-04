@@ -11,14 +11,14 @@
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: #000000;
   transition: 0.4s;
   padding: 3px;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: #F6DFCE;
   }
 }
 
@@ -32,7 +32,7 @@ a,
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9f9;
-  color: #333;
+  color: #000000;
   margin: 0;
 }
 
@@ -42,8 +42,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #1d2671;
-  color: white;
+  background-color: #FDF8F0;
+  color: #000000;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -92,13 +92,13 @@ body {
 
 .nav-links a {
   text-decoration: none;
-  color: white;
+  color: #000000;
   font-size: 1rem;
   transition: color 0.3s;
 }
 
 .nav-links a:hover {
-  color: #e0517e;
+  color: #F6DFCE;
 }
 
 .auth-buttons {
@@ -118,30 +118,30 @@ body {
 
 .login-btn {
   background-color: transparent;
-  color: white;
-  border: 1px solid white;
+  color: #000000;
+  border: 1px solid #000000;
 }
 
 .login-btn:hover {
-  background-color: white;
-  color: #1d2671;
+  background-color: #F6DFCE;
+  color: #000000;
 }
 
 .signup-btn {
-  background-color: #e0517e;
-  color: white;
+  background-color: #BC4527;
+  color: #FDF8F0;
 }
 
 .signup-btn:hover {
-  background-color: #ffffff;
-  color: #e0517e;
+  background-color: #9b3a20;
+  color: #FDF8F0;
 }
 
 /* Hero Section */
 .hero {
   height: 100vh;
-  background: linear-gradient(135deg, #1d2671, #e0517e);
-  color: white;
+  background: #F6DFCE;
+  color: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -161,11 +161,19 @@ body {
   opacity: 0.9;
 }
 
+.collection-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666666;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
 .cta-button {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background-color: #ffffff;
-  color: #1d2671;
+  background-color: #000000;
+  color: #FDF8F0;
   font-size: 1rem;
   font-weight: bold;
   text-decoration: none;
@@ -173,9 +181,35 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+.cta-button.primary-button {
+  background-color: #BC4527;
+  color: #FDF8F0;
+}
+
+.cta-button.primary-button:hover {
+  background-color: #9b3a20;
+}
+
+.cta-button.secondary-button {
+  background-color: #FDF8F0;
+  color: #000000;
+}
+
+.cta-button.secondary-button:hover {
+  background-color: #F6DFCE;
+  color: #000000;
+}
+
 .cta-button:hover {
-  background-color: #1d2671;
-  color: #ffffff;
+  background-color: #FDF8F0;
+  color: #000000;
+}
+
+.cta-buttons-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 @media (max-width: 768px) {
@@ -187,12 +221,22 @@ body {
   .hero-content h1 {
     font-size: 2rem;
   }
+
+  .cta-buttons-group {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cta-button {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Footer */
 .footer {
-  background-color: #161938;
-  color: #f3f4f6;
+  background-color: #FDF8F0;
+  color: #000000;
   padding: 3rem 2rem 1rem;
 }
 
@@ -212,11 +256,11 @@ body {
 
 /* Bottom bar */
 .footer-bottom {
-  border-top: 1px solid #374151;
+  border-top: 1px solid #F6DFCE;
   padding-top: 1rem;
   text-align: center;
   font-size: 0.85rem;
-  color: #9ca3af;
+  color: #666666;
 }
 
 .footer-section h3 {
@@ -240,19 +284,19 @@ body {
 }
 
 .auth-modal {
-  background: white;
+  background: #FDF8F0;
   width: 400px;
   max-width: 90%;
   padding: 2rem;
   border-radius: 10px;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
-  color: #1f2937; 
+  color: #000000; 
 }
 
 .auth-modal label,
 .auth-modal p {
-  color: #111827; 
+  color: #000000; 
 }
 
 
@@ -260,7 +304,7 @@ body {
 .auth-modal h2 {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #1d2671;
+  color: #000000;
 }
 
 .close-btn {
@@ -294,14 +338,14 @@ body {
 }
 
 .form-group input:focus {
-  border-color: #e0517e;
+  border-color: #F6DFCE;
 }
 
 .auth-submit {
   width: 100%;
   padding: 0.7rem;
-  background: linear-gradient(135deg, #1d2671, #e0517e);
-  color: white;
+  background: #F6DFCE;
+  color: #000000;
   border: none;
   border-radius: 5px;
   font-weight: bold;
@@ -316,12 +360,12 @@ body {
 .switch-text {
   text-align: center;
   margin-top: 1rem;
-  color: #1f2937; /* dark */
+  color: #000000;
   font-weight: 500;
 }
 
 .switch-text span {
-  color: #e0517e;
+  color: #F6DFCE;
   cursor: pointer;
   font-weight: bold;
 }
