@@ -357,6 +357,19 @@ body {
   opacity: 0.9;
 }
 
+.password-rules {
+  margin-top: 0.5rem;
+  padding-left: 1.1rem;
+  color: #9b1c1c;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.password-rules li.valid {
+  color: #BC4527;
+  text-decoration: line-through;
+}
+
 .switch-text {
   text-align: center;
   margin-top: 1rem;

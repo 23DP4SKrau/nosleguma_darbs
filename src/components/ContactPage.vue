@@ -1,6 +1,5 @@
 <template>
   <div class="contact-page">
-    <!-- Navigation Bar -->
     <header class="navbar">
       <div class="navbar-left">
         <div class="logo-container">
@@ -14,134 +13,75 @@
             <li><router-link to="/about">Par mums</router-link></li>
             <li><router-link to="/hobbies">Hobiji</router-link></li>
             <li><router-link to="/contact">Kontakti</router-link></li>
+            <li><router-link to="/profile">Profils</router-link></li>
           </ul>
         </nav>
       </div>
 
       <div class="navbar-right">
-        <input 
-          type="text" 
+        <input
+          type="text"
           v-model="searchQuery"
-          placeholder="Meklēt hobijus..." 
-          class="search-bar" 
+          placeholder="Meklēt hobijus..."
+          class="search-bar"
         />
 
         <div class="auth-buttons">
-          <button class="login-btn" @click="openLogin">Pieslēgties</button>
-          <button class="signup-btn" @click="openSignup">Reģistrēties</button>
+          <template v-if="currentUser">
+            <router-link class="login-btn" to="/profile">Mans profils</router-link>
+            <button class="signup-btn" @click="logout">Iziet</button>
+          </template>
+          <template v-else>
+            <button class="login-btn" @click="openLogin">Pieslēgties</button>
+            <button class="signup-btn" @click="openSignup">Reģistrēties</button>
+          </template>
         </div>
       </div>
     </header>
 
-    <!-- Contact Hero Section -->
-    <section class="contact-hero">
-      <div class="contact-container">
-        <!-- Left Side -->
-        <div class="contact-left">
-          <p class="collection-label">sazināšanās</p>
-          <h1>Runājam par hobijiem</h1>
-          <div class="contact-options">
-            <div class="option">
-              <span class="option-icon"></span>
-              <p>Ziņo mums par neērtībām</p>
-            </div>
-            <div class="option">
-              <span class="option-icon"></span>
-              <p>Dalies ar savu darbu</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Side - Contact Form -->
-        <div class="contact-right">
-          <form @submit.prevent="handleSubmit" class="contact-form">
-            <div class="form-group">
-              <input 
-                type="text" 
-                v-model="form.name" 
-                placeholder="Jūsu vārds" 
-                required 
-                class="form-input"
-              />
-            </div>
-
-            <div class="form-group">
-              <input 
-                type="email" 
-                v-model="form.email" 
-                placeholder="Jūsu e-pasts" 
-                required 
-                class="form-input"
-              />
-            </div>
-
-            <div class="form-group">
-              <textarea 
-                v-model="form.message" 
-                placeholder="Jūsu ziņa" 
-                required 
-                rows="5"
-                class="form-input form-textarea"
-              ></textarea>
-            </div>
-
-            <button type="submit" class="send-btn">Nosūtīt ziņu</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Auth Modal -->
-    <div v-if="showAuth" class="auth-overlay" @click.self="closeAuth">
-      <div class="auth-modal">
-        <button class="close-btn" @click="closeAuth">×</button>
-
-        <h2>{{ isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu' }}</h2>
-
-        <form @submit.prevent="handleAuthSubmit">
-          <div v-if="!isLogin" class="form-group">
-            <label>Pilns vārds</label>
-            <input type="text" v-model="authForm.name" required />
-          </div>
-
-          <div class="form-group">
-            <label>E-pasts</label>
-            <input type="email" v-model="authForm.email" required />
-          </div>
-
-          <div class="form-group password-group">
-            <label>Parole</label>
-
-            <div class="password-wrapper">
-              <input 
-                :type="showPassword ? 'text' : 'password'" 
-                v-model="authForm.password" 
-                required 
-              />
-              <span class="eye-icon" @click="togglePassword">
-                {{ showPassword ? '⌣' : '👁' }}
-              </span>
-            </div>
-          </div>
-
-          <button type="submit" class="auth-submit">
-            {{ isLogin ? 'Pieslēgties' : 'Reģistrēties' }}
-          </button>
-        </form>
-
-        <p class="switch-text">
-          {{ isLogin ? "Nav konta?" : "Jau ir konts?" }}
-          <span @click="toggleAuth">
-            {{ isLogin ? "Reģistrēties" : "Pieslēgties" }}
-          </span>
+    <main class="contact-hero">
+      <section class="contact-left">
+        <p class="collection-label">sazināšanās</p>
+        <h1>Runājam par hobijiem</h1>
+        <p>
+          Šeit lietotājs var nosūtīt jautājumu, ieteikumu vai ziņu administratoram.
         </p>
-      </div>
-    </div>
+      </section>
 
-    <!-- Footer -->
+      <section class="contact-right">
+        <form class="contact-form" @submit.prevent="handleSubmit">
+          <label>
+            Vārds
+            <input v-model="form.name" type="text" required maxlength="255" />
+          </label>
+
+          <label>
+            E-pasts
+            <input v-model="form.email" type="email" required maxlength="255" />
+          </label>
+
+          <label>
+            Temats
+            <input v-model="form.subject" type="text" required maxlength="255" />
+          </label>
+
+          <label>
+            Ziņa
+            <textarea v-model="form.message" required minlength="10" rows="6"></textarea>
+          </label>
+
+          <button type="submit" :disabled="isSending">
+            {{ isSending ? 'Nosūta...' : 'Nosūtīt ziņu' }}
+          </button>
+
+          <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+          <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+        </form>
+      </section>
+    </main>
+
     <footer class="footer">
       <div class="footer-container">
-
         <div class="footer-section">
           <h3>HobiSpace</h3>
           <p>Izpēti hobijus. Atklāj aizrautību. Savienojies ar radošumu.</p>
@@ -175,231 +115,296 @@
 </template>
 
 <script>
+const API_URL = 'http://127.0.0.1:8000/api'
+
 export default {
   name: 'ContactPage',
   data() {
     return {
       searchQuery: '',
+      currentUser: null,
+      isSending: false,
+      successMessage: '',
+      errorMessage: '',
       form: {
         name: '',
         email: '',
-        message: ''
+        subject: '',
+        message: '',
       },
-      authForm: {
-        name: '',
-        email: '',
-        password: ''
-      },
-      showAuth: false,
-      isLogin: true,
-      showPassword: false
     }
   },
+  mounted() {
+    this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+  },
   methods: {
-    handleSubmit() {
-      alert(`Thank you for your message, ${this.form.name}! We'll get back to you soon.`)
-      this.form = { name: '', email: '', message: '' }
-    },
     openLogin() {
-      this.isLogin = true
-      this.showAuth = true
+      this.$router.push('/hobbies')
     },
     openSignup() {
-      this.isLogin = false
-      this.showAuth = true
+      this.$router.push('/hobbies')
     },
-    closeAuth() {
-      this.showAuth = false
-      this.showPassword = false
+    logout() {
+      localStorage.removeItem('hobispace_user')
+      this.currentUser = null
     },
-    toggleAuth() {
-      this.isLogin = !this.isLogin
-    },
-    togglePassword() {
-      this.showPassword = !this.showPassword
-    },
-    handleAuthSubmit() {
-      if (this.isLogin) {
-        alert("Logged in successfully!")
-      } else {
-        alert("Account created successfully!")
+    async handleSubmit() {
+      this.isSending = true
+      this.successMessage = ''
+      this.errorMessage = ''
+
+      try {
+        const currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+        const response = await fetch(`${API_URL}/user-questions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            ...this.form,
+            user_id: currentUser?.id || null,
+          }),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Ziņu neizdevās nosūtīt.')
+        }
+
+        this.successMessage = data.message
+        this.form = { name: '', email: '', subject: '', message: '' }
+      } catch (error) {
+        this.errorMessage = error.message
+      } finally {
+        this.isSending = false
       }
-      this.closeAuth()
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>
 .contact-page {
-  width: 100%;
+  min-height: 100vh;
+  background: #fffaf5;
+  color: #1f1f1f;
 }
 
-/* Contact Hero Section */
-.contact-hero {
-  background-color: #F6DFCE;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #FDF8F0;
   color: #000000;
-  padding: 80px 20px;
-  min-height: 500px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-left,
+.logo-container,
+.nav-links {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.contact-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  max-width: 1200px;
-  width: 100%;
-  align-items: center;
+.navbar-left {
+  gap: 2rem;
 }
 
-/* Left Side */
-.contact-left h1 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.contact-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.option {
-  background-color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 10px;
+.navbar-right {
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.option:hover {
-  transform: translateX(10px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.search-bar {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-size: 0.9rem;
 }
 
-.option-icon {
-  font-size: 2rem;
-}
-
-.option p {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0;
-}
-
-/* Right Side - Form */
-.contact-right {
-  background-color: #ffffff;
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.contact-form {
+.auth-buttons {
   display: flex;
-  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-btn,
+.signup-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.login-btn {
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+.login-btn:hover {
+  background-color: #F6DFCE;
+}
+
+.signup-btn {
+  background-color: #BC4527;
+  color: #FDF8F0;
+}
+
+.signup-btn:hover {
+  background-color: #9b3a20;
+}
+
+.logo-container {
+  gap: 0.5rem;
+}
+
+.logo {
+  height: 40px;
+}
+
+.project-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
   gap: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-input {
-  padding: 1rem;
-  border: 2px solid #f0f0f0;
-  border-radius: 8px;
+.nav-links a {
+  text-decoration: none;
+  color: #000000;
   font-size: 1rem;
-  font-family: inherit;
-  transition: border-color 0.3s;
-  background-color: #f9f9f9;
+  transition: color 0.3s;
 }
 
-.form-input:focus {
-  outline: none;
-  border-color: #F6DFCE;
-  background-color: #ffffff;
+.nav-links a:hover {
+  color: #F6DFCE;
 }
 
-.form-textarea {
-  resize: vertical;
-  font-family: inherit;
+.contact-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
+  gap: 3rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 5rem 1.25rem;
 }
 
-.send-btn {
-  padding: 1rem 2rem;
+.collection-label {
+  margin: 0 0 0.75rem;
+  color: #705949;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.contact-left h1 {
+  margin: 0 0 1rem;
+  font-size: 3rem;
+}
+
+.contact-left p {
+  max-width: 620px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.contact-left span {
+  font-weight: 700;
+}
+
+.contact-right {
+  padding: 1.5rem;
+  border: 1px solid #eadfd5;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 700;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid #d8c8bc;
+  border-radius: 8px;
+  padding: 0.85rem 0.95rem;
+  font: inherit;
+  background: #fffaf5;
+}
+
+.contact-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
   background-color: #BC4527;
   color: #FDF8F0;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+  font: inherit;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 0.5rem;
 }
 
-.send-btn:hover {
+.contact-form button:hover {
   background-color: #9b3a20;
   color: #FDF8F0;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.send-btn:active {
-  transform: translateY(0);
+.contact-form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .contact-container {
+.success-message,
+.error-message {
+  margin: 0;
+  font-weight: 700;
+}
+
+.success-message {
+  color: #256548;
+}
+
+.error-message {
+  color: #9b1c1c;
+}
+
+@media (max-width: 780px) {
+  .navbar,
+  .navbar-left,
+  .navbar-right,
+  .auth-buttons,
+  .nav-links {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .contact-hero {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    padding-top: 3rem;
   }
 
   .contact-left h1 {
-    font-size: 2rem;
-  }
-
-  .contact-options {
-    gap: 1rem;
-  }
-
-  .option {
-    padding: 1rem;
-  }
-
-  .option-icon {
-    font-size: 1.5rem;
-  }
-
-  .option p {
-    font-size: 1rem;
-  }
-
-  .contact-right {
-    padding: 1.5rem;
-  }
-
-  .contact-form {
-    gap: 1rem;
-  }
-
-  .form-input {
-    padding: 0.75rem;
-  }
-
-  .send-btn {
-    padding: 0.75rem 1.5rem;
+    font-size: 2.2rem;
   }
 }
 </style>

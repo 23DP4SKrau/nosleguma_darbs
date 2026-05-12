@@ -14,6 +14,7 @@
             <li><router-link to="/about">Par mums</router-link></li>
             <li><router-link to="/hobbies">Hobiji</router-link></li>
             <li><router-link to="/contact">Kontakti</router-link></li>
+            <li><router-link to="/profile">Profils</router-link></li>
           </ul>
         </nav>
       </div>
@@ -27,8 +28,14 @@
         />
 
         <div class="auth-buttons">
-          <button class="login-btn" @click="openLogin">Pieslēgties</button>
-          <button class="signup-btn" @click="openSignup">Reģistrēties</button>
+          <template v-if="currentUser">
+            <router-link class="login-btn" to="/profile">Mans profils</router-link>
+            <button class="signup-btn" @click="logout">Iziet</button>
+          </template>
+          <template v-else>
+            <button class="login-btn" @click="openLogin">Pieslēgties</button>
+            <button class="signup-btn" @click="openSignup">Reģistrēties</button>
+          </template>
         </div>
       </div>
     </header>
@@ -110,6 +117,13 @@
                 {{ showPassword ? '⌣' : '👁' }}
               </span>
             </div>
+            <ul v-if="!isLogin && form.password" class="password-rules">
+              <li :class="{ valid: passwordChecks.length }">Vismaz 8 simboli</li>
+              <li :class="{ valid: passwordChecks.uppercase }">Viens lielais burts</li>
+              <li :class="{ valid: passwordChecks.lowercase }">Viens mazais burts</li>
+              <li :class="{ valid: passwordChecks.number }">Viens cipars</li>
+              <li :class="{ valid: passwordChecks.symbol }">Viens speciālais simbols</li>
+            </ul>
           </div>
 
           <button type="submit" class="auth-submit">
@@ -162,6 +176,8 @@
 </template>
 
 <script>
+const API_URL = 'http://127.0.0.1:8000/api'
+
 export default {
   name: 'AboutPage',
   data() {
@@ -170,12 +186,32 @@ export default {
       showAuth: false,
       isLogin: true,
       showPassword: false,  
+      currentUser: null,
       form: {
         name: '',
         email: '',
         password: ''
       }
     }
+  },
+  mounted() {
+    this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+  },
+  computed: {
+    passwordChecks() {
+      const password = this.form.password
+
+      return {
+        length: password.length >= 8,
+        uppercase: /[A-ZĀČĒĢĪĶĻŅŠŪŽ]/.test(password),
+        lowercase: /[a-zāčēģīķļņšūž]/.test(password),
+        number: /\d/.test(password),
+        symbol: /[^A-Za-zĀČĒĢĪĶĻŅŠŪŽāčēģīķļņšūž0-9]/.test(password),
+      }
+    },
+    isPasswordStrong() {
+      return Object.values(this.passwordChecks).every(Boolean)
+    },
   },
   methods: {
     openLogin() {
@@ -196,13 +232,42 @@ export default {
     togglePassword() {        
       this.showPassword = !this.showPassword
     },
-    handleSubmit() {
-      if (this.isLogin) {
-        alert("Logged in successfully!")
-      } else {
-        alert("Account created successfully!")
+    async handleSubmit() {
+      const path = this.isLogin ? '/login' : '/register'
+
+      if (!this.isLogin && !this.isPasswordStrong) {
+        alert('Parole nav pietiekami stipra.')
+        return
       }
-      this.closeAuth()
+
+      try {
+        const response = await fetch(`${API_URL}${path}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(this.form),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          alert(data.message || 'Pārbaudi ievadītos datus.')
+          return
+        }
+
+        localStorage.setItem('hobispace_user', JSON.stringify(data.user))
+        this.currentUser = data.user
+        this.closeAuth()
+        this.$router.push('/profile')
+      } catch (error) {
+        alert('Nevar pieslēgties Laravel serverim.')
+      }
+    },
+    logout() {
+      localStorage.removeItem('hobispace_user')
+      this.currentUser = null
     }
   }
 };
