@@ -726,6 +726,7 @@ export default {
 .hobbies-hero-content p {
   font-size: 1.5rem;
   opacity: 0.9;
+  line-height: 1.55;
 }
 
 .collection-label {
@@ -876,8 +877,41 @@ export default {
 }
 
 @media (max-width: 520px) {
+  .hobbies-hero {
+    padding: 3.5rem 1rem;
+    min-height: auto;
+  }
+
+  .hobbies-hero-content h1 {
+    font-size: 1.85rem;
+  }
+
+  .hobbies-hero-content p {
+    font-size: 1rem;
+  }
+
+  .hobbies-section {
+    padding: 2rem 1rem;
+  }
+
+  .hobbies-actions {
+    justify-content: stretch;
+  }
+
+  .add-hobby-btn {
+    width: 100%;
+  }
+
   .hobbies-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hobby-card {
+    border-radius: 8px;
+  }
+
+  .hobby-image {
+    height: 140px;
   }
 }
 
@@ -892,6 +926,7 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .log-modal {
@@ -997,6 +1032,23 @@ export default {
 }
 
 @media (max-width: 520px) {
+  .log-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .log-modal {
+    width: 100%;
+    max-height: none;
+    padding: 1.4rem;
+    margin: 1rem 0;
+  }
+
+  .log-modal h2 {
+    font-size: 1.25rem;
+    padding-right: 2rem;
+  }
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;

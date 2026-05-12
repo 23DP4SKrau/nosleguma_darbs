@@ -299,6 +299,7 @@ export default {
 .about-hero-content p {
   font-size: 1.5rem;
   opacity: 0.9;
+  line-height: 1.55;
 }
 
 .hero-subtitle {
@@ -431,6 +432,11 @@ export default {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .about-hero {
+    padding: 3.5rem 1rem;
+    min-height: auto;
+  }
+
   .about-hero-content h1 {
     font-size: 2rem;
   }
@@ -447,10 +453,40 @@ export default {
 
   .offers-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .reasons {
     grid-template-columns: 1fr;
+  }
+
+  .mission-section,
+  .offers-section,
+  .why-us-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .offer-card,
+  .reason {
+    padding: 1.25rem;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .about-hero-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .about-hero-content p,
+  .mission-section p {
+    font-size: 1rem;
+  }
+
+  .mission-section h2,
+  .offers-section h2,
+  .why-us-section h2 {
+    font-size: 1.65rem;
   }
 }
 </style>

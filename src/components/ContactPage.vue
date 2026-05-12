@@ -202,6 +202,8 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .navbar-left,
@@ -213,12 +215,14 @@ export default {
 
 .navbar-left {
   gap: 2rem;
+  min-width: 0;
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .search-bar {
@@ -232,6 +236,7 @@ export default {
 .auth-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .login-btn,
@@ -281,6 +286,7 @@ export default {
   list-style: none;
   display: flex;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -389,22 +395,114 @@ export default {
 }
 
 @media (max-width: 780px) {
-  .navbar,
+  .navbar {
+    padding: 0.85rem 1rem;
+    justify-content: center;
+  }
+
   .navbar-left,
-  .navbar-right,
-  .auth-buttons,
-  .nav-links {
-    align-items: flex-start;
+  .navbar-right {
+    width: 100%;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .navbar-left,
+  .navbar-right {
     flex-direction: column;
+  }
+
+  .logo-container {
+    justify-content: center;
+  }
+
+  .logo {
+    height: 34px;
+  }
+
+  .project-name {
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .nav-links a {
+    display: inline-flex;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 0.92rem;
+    line-height: 1;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid #eadfd5;
+    background-color: #ffffff;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    max-width: 360px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .login-btn,
+  .signup-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.92rem;
   }
 
   .contact-hero {
     grid-template-columns: 1fr;
-    padding-top: 3rem;
+    gap: 1.5rem;
+    padding: 3rem 1rem;
   }
 
   .contact-left h1 {
     font-size: 2.2rem;
+  }
+
+  .contact-right {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar {
+    padding: 0.75rem;
+  }
+
+  .nav-links {
+    gap: 0.35rem;
+  }
+
+  .nav-links a {
+    font-size: 0.86rem;
+    padding: 0.42rem 0.5rem;
+  }
+
+  .auth-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-left h1 {
+    font-size: 1.85rem;
+  }
+
+  .contact-left p,
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form button {
+    font-size: 1rem;
   }
 }
 </style>

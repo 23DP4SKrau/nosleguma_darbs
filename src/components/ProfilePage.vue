@@ -342,6 +342,8 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .navbar-left,
@@ -353,12 +355,14 @@ export default {
 
 .navbar-left {
   gap: 2rem;
+  min-width: 0;
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .search-bar {
@@ -372,6 +376,7 @@ export default {
 .auth-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .login-btn,
@@ -421,6 +426,7 @@ export default {
   list-style: none;
   display: flex;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -680,15 +686,82 @@ export default {
 }
 
 @media (max-width: 780px) {
-  .navbar,
+  .navbar {
+    padding: 0.85rem 1rem;
+    justify-content: center;
+  }
+
   .navbar-left,
-  .navbar-right,
-  .auth-buttons,
-  .nav-links,
-  .profile-hero {
-    align-items: flex-start;
-    grid-template-columns: 1fr;
+  .navbar-right {
+    width: 100%;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .navbar-left,
+  .navbar-right {
     flex-direction: column;
+  }
+
+  .logo-container {
+    justify-content: center;
+  }
+
+  .logo {
+    height: 34px;
+  }
+
+  .project-name {
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .nav-links a {
+    display: inline-flex;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 0.92rem;
+    line-height: 1;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid #eadfd5;
+    background-color: #ffffff;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    max-width: 360px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .login-btn,
+  .signup-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.92rem;
+  }
+
+  .profile-shell,
+  .empty-profile {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .profile-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+    padding: 1.5rem;
   }
 
   .stats-grid,
@@ -699,6 +772,51 @@ export default {
 
   .profile-hero h1 {
     font-size: 2rem;
+  }
+
+  .favorite-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .favorite-icon {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar {
+    padding: 0.75rem;
+  }
+
+  .nav-links {
+    gap: 0.35rem;
+  }
+
+  .nav-links a {
+    font-size: 0.86rem;
+    padding: 0.42rem 0.5rem;
+  }
+
+  .auth-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-profile h1,
+  .profile-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .avatar {
+    width: 76px;
+    height: 76px;
+    font-size: 1.6rem;
+  }
+
+  .profile-panel,
+  .favorites-section,
+  .stats-grid article {
+    padding: 1rem;
   }
 }
 </style>
