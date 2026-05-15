@@ -48,6 +48,7 @@
 import { reactive, ref } from 'vue'
 
 const isLogin = ref(true)
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 const form = reactive({
   name: '',
@@ -57,8 +58,8 @@ const form = reactive({
 
 async function handleSubmit() {
   const url = isLogin.value
-    ? 'http://127.0.0.1:8000/api/login'
-    : 'http://127.0.0.1:8000/api/register'
+    ? `${API_URL}/login`
+    : `${API_URL}/register`
 
   try {
     const response = await fetch(url, {

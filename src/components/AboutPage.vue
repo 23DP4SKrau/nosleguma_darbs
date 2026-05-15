@@ -54,7 +54,7 @@
       <div class="container">
         <h2>Mūsu misija</h2>
         <p>
-          HobiSpace tic, ka hobiji ir gan laika pavadīšana interesantā veidā, gan ceļs uz pašatklāšanu, 
+          HobiSpace tic, ka hobiji ir gan laika pavadīšana interesantā veidā, gan ceļš uz pašatklāšanu, 
           radošumu un savienojumu ar citiem. Mūsu misija ir ļaut HobiSpace lietotājiem atcerēties savus piedzīvojumus. Šeit cilvēki var izpētīt dažādus hobijus, 
           dalīties savās aizrautībās un iedvesmot citus sekot savām interesēm.
         </p>
@@ -113,9 +113,15 @@
                 v-model="form.password" 
                 required 
               />
-              <span class="eye-icon" @click="togglePassword">
-                {{ showPassword ? '⌣' : '👁' }}
-              </span>
+              <button
+                type="button"
+                class="eye-icon"
+                :aria-label="showPassword ? 'Paslēpt paroli' : 'Parādīt paroli'"
+                @click="togglePassword"
+              >
+                <span v-if="showPassword" aria-hidden="true">&#x2323;</span>
+                <span v-else aria-hidden="true">&#x1F441;</span>
+              </button>
             </div>
             <ul v-if="!isLogin && form.password" class="password-rules">
               <li :class="{ valid: passwordChecks.length }">Vismaz 8 simboli</li>
@@ -176,7 +182,7 @@
 </template>
 
 <script>
-const API_URL = 'http://127.0.0.1:8000/api'
+import { API_URL } from '@/config/api'
 
 export default {
   name: 'AboutPage',
@@ -203,10 +209,10 @@ export default {
 
       return {
         length: password.length >= 8,
-        uppercase: /[A-ZĀČĒĢĪĶĻŅŠŪŽ]/.test(password),
-        lowercase: /[a-zāčēģīķļņšūž]/.test(password),
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
         number: /\d/.test(password),
-        symbol: /[^A-Za-zĀČĒĢĪĶĻŅŠŪŽāčēģīķļņšūž0-9]/.test(password),
+        symbol: /[^A-Za-z0-9]/.test(password),
       }
     },
     isPasswordStrong() {
@@ -343,7 +349,7 @@ export default {
 /* Offers Section */
 .offers-section {
   padding: 60px 20px;
-  background-color: #FDF8F0;
+  background-color: #F6DFCE;
 }
 
 .offers-section h2 {

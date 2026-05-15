@@ -20,6 +20,7 @@ class Hobby extends Model
         'image',
         'difficulty',
         'estimated_cost',
+        'custom_log_label',
         'is_public',
     ];
 

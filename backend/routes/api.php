@@ -140,6 +140,7 @@ Route::post('/hobbies', function (Request $request) {
         'image_file' => ['nullable', 'image', 'max:4096'],
         'difficulty' => ['nullable', Rule::in(['viegls', 'videjs', 'sarezgits'])],
         'estimated_cost' => ['required', Rule::in(['bezmaksas', 'zemas', 'videjas', 'augstas'])],
+        'custom_log_label' => ['nullable', 'string', 'max:255'],
     ]);
 
     $data['difficulty'] = $data['difficulty'] ?? 'viegls';
@@ -169,6 +170,7 @@ Route::put('/hobbies/{hobby}', function (Request $request, Hobby $hobby) {
         'image' => ['nullable', 'string', 'max:255'],
         'difficulty' => ['required', Rule::in(['viegls', 'videjs', 'sarezgits'])],
         'estimated_cost' => ['required', Rule::in(['bezmaksas', 'zemas', 'videjas', 'augstas'])],
+        'custom_log_label' => ['nullable', 'string', 'max:255'],
         'is_public' => ['boolean'],
     ]);
 
@@ -215,6 +217,26 @@ Route::post('/hobby-logs', function (Request $request) {
         'message' => 'Ieraksts veiksmigi saglabats!',
         'log' => $log,
     ], 201);
+});
+
+Route::put('/hobby-logs/{hobbyLog}', function (Request $request, HobbyLog $hobbyLog) {
+    $data = $request->validate([
+        'user_id' => ['required', 'exists:users,id'],
+        'hobby_id' => ['required', 'exists:hobbies,id'],
+        'log_date' => ['required', 'date', 'before_or_equal:today'],
+        'title' => ['required', 'string', 'max:255'],
+        'notes' => ['nullable', 'string'],
+        'duration_minutes' => ['nullable', 'integer', 'min:1', 'max:1440'],
+        'specific_value' => ['nullable', 'string', 'max:255'],
+        'mood_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+    ]);
+
+    $hobbyLog->update($data);
+
+    return response()->json([
+        'message' => 'Ieraksts veiksmigi atjaunots!',
+        'log' => $hobbyLog->load(['hobby:id,name', 'user:id,name']),
+    ]);
 });
 
 Route::delete('/hobby-logs/{hobbyLog}', function (HobbyLog $hobbyLog) {
@@ -284,9 +306,16 @@ Route::post('/user-questions', function (Request $request) {
     $question = UserQuestion::create($data);
 
     return response()->json([
-        'message' => 'Jautajums veiksmigi nosutits!',
+        'message' => 'Jautājums veiksmīgi saglabāts!',
         'question' => $question,
     ], 201);
+});
+
+Route::get('/user-questions', function () {
+    return UserQuestion::query()
+        ->with('user:id,name,email')
+        ->latest()
+        ->get();
 });
 
 Route::get('/statistics', function () {

@@ -115,7 +115,7 @@
 </template>
 
 <script>
-const API_URL = 'http://127.0.0.1:8000/api'
+import { API_URL } from '@/config/api'
 
 export default {
   name: 'ContactPage',
@@ -136,6 +136,11 @@ export default {
   },
   mounted() {
     this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+
+    if (this.currentUser) {
+      this.form.name = this.currentUser.name || ''
+      this.form.email = this.currentUser.email || ''
+    }
   },
   methods: {
     openLogin() {
@@ -155,26 +160,36 @@ export default {
 
       try {
         const currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+        const question = {
+          name: this.form.name.trim(),
+          email: this.form.email.trim(),
+          subject: this.form.subject.trim(),
+          message: this.form.message.trim(),
+          user_id: currentUser?.id || null,
+        }
+
         const response = await fetch(`${API_URL}/user-questions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
           },
-          body: JSON.stringify({
-            ...this.form,
-            user_id: currentUser?.id || null,
-          }),
+          body: JSON.stringify(question),
         })
 
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(data.message || 'Ziņu neizdevās nosūtīt.')
+          throw new Error(data.message || 'Jautājumu neizdevās saglabāt.')
         }
 
-        this.successMessage = data.message
-        this.form = { name: '', email: '', subject: '', message: '' }
+        this.successMessage = data.message || 'Jautājums veiksmīgi saglabāts!'
+        this.form = {
+          name: currentUser?.name || '',
+          email: currentUser?.email || '',
+          subject: '',
+          message: '',
+        }
       } catch (error) {
         this.errorMessage = error.message
       } finally {

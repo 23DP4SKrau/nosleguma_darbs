@@ -148,33 +148,50 @@ body {
 /* Hero Section */
 .hero {
   min-height: calc(100vh - 84px);
-  background: #F6DFCE;
-  color: #000000;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.48) 45%, rgba(0, 0, 0, 0.2) 100%),
+    url('./hobhob.png') center / cover no-repeat;
+  color: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  text-align: center;
-  padding: 2rem;
+  text-align: left;
+  padding: 4rem 7vw;
+  position: relative;
+}
+
+.hero-content {
+  width: min(620px, 100%);
+  animation: heroFloat 5s ease-in-out infinite;
+  isolation: isolate;
+  position: relative;
 }
 
 .hero-content h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   margin-bottom: 1rem;
-  font-weight: 700;
+  font-weight: 800;
+  line-height: 1.05;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+  max-width: 12ch;
 }
 
 .hero-content p {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
+  font-size: 1.3rem;
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  line-height: 1.65;
+  max-width: 560px;
 }
 
 .collection-label {
   font-size: 1rem;
-  font-weight: 500;
-  color: #666666;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
+  font-weight: 800;
+  color: #F6DFCE;
+  margin-bottom: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .cta-button {
@@ -199,12 +216,14 @@ body {
 }
 
 .cta-button.secondary-button {
-  background-color: #FDF8F0;
-  color: #000000;
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
 }
 
 .cta-button.secondary-button:hover {
-  background-color: #F6DFCE;
+  background-color: #FDF8F0;
   color: #000000;
 }
 
@@ -216,8 +235,19 @@ body {
 .cta-buttons-group {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 2rem;
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @media (max-width: 768px) {
@@ -292,11 +322,21 @@ body {
 
   .hero {
     min-height: auto;
-    padding: 4rem 1rem;
+    padding: 5rem 1rem;
+    text-align: center;
+    justify-content: center;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.45) 100%),
+      url('./hobhob.png') center / cover no-repeat;
+  }
+
+  .hero-content {
+    animation: none;
   }
 
   .hero-content h1 {
-    font-size: 2rem;
+    font-size: 2.35rem;
+    max-width: none;
   }
 
   .hero-content p {
@@ -306,6 +346,7 @@ body {
   .cta-buttons-group {
     flex-direction: column;
     gap: 1rem;
+    justify-content: center;
   }
 
   .cta-button {
@@ -540,7 +581,7 @@ body {
 .password-wrapper input {
   width: 100%;
   padding: 0.6rem;
-  padding-right: 2.5rem; /* space for eye */
+  padding-right: 2.75rem;
   border-radius: 5px;
   border: 1px solid #ccc;
   outline: none;
@@ -551,12 +592,189 @@ body {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  min-width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #1f1f1f;
   cursor: pointer;
-  font-size: 1rem;
-  user-select: none;
+  font-size: 1.05rem;
+  line-height: 1;
   transition: 0.2s;
+}
+
+.eye-icon span {
+  display: block;
 }
 
 .eye-icon:hover {
   opacity: 0.7;
+}
+
+body.dark-mode {
+  background-color: #151515;
+  color: #f4eee8;
+}
+
+body.dark-mode a,
+body.dark-mode .nav-links a,
+body.dark-mode .project-name,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode label,
+body.dark-mode .mission-section h2,
+body.dark-mode .offers-section h2,
+body.dark-mode .why-us-section h2,
+body.dark-mode .offer-card h3,
+body.dark-mode .reason h3 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .footer,
+body.dark-mode .profile-page,
+body.dark-mode .contact-page,
+body.dark-mode .hobbies-page,
+body.dark-mode .about-page {
+  background-color: #151515;
+  color: #f4eee8;
+}
+
+body.dark-mode .profile-shell,
+body.dark-mode .empty-profile,
+body.dark-mode .profile-panel,
+body.dark-mode .favorites-section,
+body.dark-mode .theme-section,
+body.dark-mode .stats-grid article,
+body.dark-mode .favorite-card,
+body.dark-mode .theme-toggle-row,
+body.dark-mode .contact-right,
+body.dark-mode .contact-form,
+body.dark-mode .hobby-card,
+body.dark-mode .hobbies-section,
+body.dark-mode .log-modal,
+body.dark-mode .log-list-panel,
+body.dark-mode .log-item,
+body.dark-mode .auth-modal,
+body.dark-mode .offer-card,
+body.dark-mode .feature-card,
+body.dark-mode .about-card,
+body.dark-mode .team-card,
+body.dark-mode .reason,
+body.dark-mode .home-section,
+body.dark-mode .features-section,
+body.dark-mode .content-section,
+body.dark-mode .info-section,
+body.dark-mode .cta-section {
+  background-color: #222222 !important;
+  border-color: #3a332e !important;
+  color: #f4eee8 !important;
+}
+
+body.dark-mode .profile-hero,
+body.dark-mode .about-hero,
+body.dark-mode .hobbies-hero,
+body.dark-mode .hero:not(.home-hero),
+body.dark-mode .offers-section,
+body.dark-mode .mission-section,
+body.dark-mode .why-us-section,
+body.dark-mode .contact-hero {
+  background-color: #1b1b1b !important;
+  color: #f4eee8 !important;
+}
+
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode .eyebrow,
+body.dark-mode .soft-empty,
+body.dark-mode .hobby-description,
+body.dark-mode .profile-hero p:not(.eyebrow),
+body.dark-mode .stats-grid p,
+body.dark-mode .theme-toggle-row p,
+body.dark-mode .favorite-content span,
+body.dark-mode .log-list span,
+body.dark-mode .log-item span,
+body.dark-mode .log-item small,
+body.dark-mode .log-item p,
+body.dark-mode .log-empty,
+body.dark-mode .hero-subtitle,
+body.dark-mode .offer-card p,
+body.dark-mode .reason p,
+body.dark-mode .mission-section p,
+body.dark-mode .why-us-section p,
+body.dark-mode .offers-section p,
+body.dark-mode .offer-card p,
+body.dark-mode .reason p,
+body.dark-mode .about-hero-content p,
+body.dark-mode .hobbies-hero-content p,
+body.dark-mode .contact-left p,
+body.dark-mode .footer-section p,
+body.dark-mode .footer-bottom {
+  color: #d8ccc2 !important;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode .search-bar {
+  background-color: #151515 !important;
+  border-color: #4a4038 !important;
+  color: #f4eee8 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #a99b90;
+}
+
+body.dark-mode .login-btn,
+body.dark-mode .card-action-btn,
+body.dark-mode .secondary-btn,
+body.dark-mode .theme-toggle,
+body.dark-mode .logout-btn,
+body.dark-mode .eye-icon {
+  background-color: #222222 !important;
+  border-color: #5b4b40 !important;
+  color: #f4eee8 !important;
+}
+
+body.dark-mode .signup-btn,
+body.dark-mode .add-hobby-btn,
+body.dark-mode .save-btn,
+body.dark-mode .profile-form button,
+body.dark-mode .favorite-card button,
+body.dark-mode .contact-form button,
+body.dark-mode .theme-toggle.active {
+  background-color: #BC4527 !important;
+  color: #FDF8F0 !important;
+}
+
+body.dark-mode .hobby-meta span,
+body.dark-mode .log-list-heading span,
+body.dark-mode .favorite-icon,
+body.dark-mode .avatar,
+body.dark-mode .hobby-image,
+body.dark-mode .add-preview,
+body.dark-mode .offer-icon {
+  background-color: #2f2621 !important;
+  color: #f4eee8 !important;
+}
+
+body.dark-mode img,
+body.dark-mode .hobby-photo,
+body.dark-mode .add-preview img,
+body.dark-mode .logo {
+  filter: none !important;
+}
+
+body.dark-mode .heart-btn {
+  color: #76685f;
+}
+
+body.dark-mode .heart-btn.active {
+  color: #ff7b7b;
 }

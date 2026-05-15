@@ -141,6 +141,25 @@
           </article>
         </div>
       </section>
+
+      <section class="theme-section">
+        <div class="theme-toggle-row">
+          <div>
+            <h3>Tumšais režīms</h3>
+            <p>Pārslēdz visas mājaslapas krāsu uz tumšo noformējumu.</p>
+          </div>
+          <button
+            type="button"
+            class="theme-toggle"
+            :class="{ active: isDarkMode }"
+            :aria-pressed="isDarkMode"
+            @click="toggleDarkMode"
+          >
+            <span></span>
+            {{ isDarkMode ? 'Ieslēgts' : 'Izslēgts' }}
+          </button>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
@@ -178,7 +197,7 @@
 </template>
 
 <script>
-const API_URL = 'http://127.0.0.1:8000/api'
+import { API_URL } from '@/config/api'
 
 export default {
   name: 'ProfilePage',
@@ -200,6 +219,7 @@ export default {
       isSaving: false,
       successMessage: '',
       errorMessage: '',
+      isDarkMode: false,
     }
   },
   computed: {
@@ -214,6 +234,8 @@ export default {
   },
   mounted() {
     this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
+    this.isDarkMode = localStorage.getItem('hobispace_dark_mode') === 'true'
+    this.applyDarkMode()
 
     if (this.currentUser) {
       this.profileForm = {
@@ -225,6 +247,14 @@ export default {
     }
   },
   methods: {
+    applyDarkMode() {
+      document.body.classList.toggle('dark-mode', this.isDarkMode)
+    },
+    toggleDarkMode() {
+      this.isDarkMode = !this.isDarkMode
+      localStorage.setItem('hobispace_dark_mode', String(this.isDarkMode))
+      this.applyDarkMode()
+    },
     openLogin() {
       this.$router.push('/hobbies')
     },
@@ -640,8 +670,64 @@ export default {
   color: #62554e;
 }
 
-.favorites-section {
+.favorites-section,
+.theme-section {
   margin-top: 1rem;
+}
+
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #eadfd5;
+  border-radius: 8px;
+  background: #fffaf5;
+}
+
+.theme-toggle-row h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.theme-toggle-row p {
+  margin: 0;
+  color: #62554e;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  min-width: 116px;
+  border: 1px solid #d8c8bc;
+  border-radius: 999px;
+  padding: 0.35rem 0.55rem;
+  background: #ffffff;
+  color: #1f1f1f;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.theme-toggle span {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: #d8c8bc;
+  vertical-align: -2px;
+}
+
+.theme-toggle.active {
+  background: #BC4527;
+  color: #FDF8F0;
+  border-color: #BC4527;
+}
+
+.theme-toggle.active span {
+  background: #FDF8F0;
 }
 
 .favorites-grid {

@@ -4,6 +4,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router'; // Import the router
 
+document.body.classList.toggle('dark-mode', localStorage.getItem('hobispace_dark_mode') === 'true')
+
 const app = createApp(App);
 app.use(router); // Use the router
 app.mount('#app');

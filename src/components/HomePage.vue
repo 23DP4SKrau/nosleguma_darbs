@@ -98,9 +98,15 @@
       v-model="form.password" 
       required 
     />
-    <span class="eye-icon" @click="togglePassword">
-      {{ showPassword ? '⌣' : '👁' }}
-    </span>
+    <button
+                type="button"
+                class="eye-icon"
+                :aria-label="showPassword ? 'Paslēpt paroli' : 'Parādīt paroli'"
+                @click="togglePassword"
+              >
+                <span v-if="showPassword" aria-hidden="true">&#x2323;</span>
+                <span v-else aria-hidden="true">&#x1F441;</span>
+              </button>
   </div>
   <ul v-if="!isLogin && form.password" class="password-rules">
     <li :class="{ valid: passwordChecks.length }">Vismaz 8 simboli</li>
@@ -143,7 +149,7 @@
   </template>
   
 <script>
-const API_URL = 'http://127.0.0.1:8000/api'
+import { API_URL } from '@/config/api'
 
 export default {
   data() {
@@ -169,10 +175,10 @@ export default {
 
       return {
         length: password.length >= 8,
-        uppercase: /[A-ZĀČĒĢĪĶĻŅŠŪŽ]/.test(password),
-        lowercase: /[a-zāčēģīķļņšūž]/.test(password),
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
         number: /\d/.test(password),
-        symbol: /[^A-Za-zĀČĒĢĪĶĻŅŠŪŽāčēģīķļņšūž0-9]/.test(password),
+        symbol: /[^A-Za-z0-9]/.test(password),
       }
     },
     isPasswordStrong() {
