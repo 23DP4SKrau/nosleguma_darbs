@@ -14,7 +14,6 @@
     <li><router-link to="/about">Par mums</router-link></li>
     <li><router-link to="/hobbies">Hobiji</router-link></li>
     <li><router-link to="/contact">Kontakti</router-link></li>
-    <li><router-link to="/profile">Profils</router-link></li>
   </ul>
 </nav>
   </div>
@@ -28,8 +27,10 @@
         />
     <div class="auth-buttons">
       <template v-if="currentUser">
-        <router-link class="login-btn" to="/profile">Mans profils</router-link>
-        <button class="signup-btn" @click="logout">Iziet</button>
+        <router-link class="profile-nav-link" to="/profile" aria-label="Mans profils">
+          <img v-if="navAvatarUrl" :src="navAvatarUrl" alt="" />
+          <span v-else>{{ navInitials }}</span>
+        </router-link>
       </template>
       <template v-else>
         <button class="login-btn" @click="openLogin">Pieslēgties</button>
@@ -76,17 +77,17 @@
   <div class="auth-modal">
     <button class="close-btn" @click="closeAuth">×</button>
 
-    <h2>{{ isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu' }}</h2>
+    <h2>{{ isAdminLogin ? 'Admin pieslēgšanās' : (isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu') }}</h2>
 
     <form @submit.prevent="handleSubmit">
-      <div v-if="!isLogin" class="form-group">
+      <div v-if="!isLogin && !isAdminLogin" class="form-group">
         <label>Pilns vārds</label>
         <input type="text" v-model="form.name" required />
       </div>
 
       <div class="form-group">
-        <label>E-pasts</label>
-        <input type="email" v-model="form.email" required />
+        <label>{{ isAdminLogin ? 'Admin lietotājs' : 'E-pasts' }}</label>
+        <input :type="isAdminLogin ? 'text' : 'email'" v-model="form.email" required />
       </div>
 
       <div class="form-group password-group">
@@ -108,7 +109,7 @@
                 <span v-else aria-hidden="true">&#x1F441;</span>
               </button>
   </div>
-  <ul v-if="!isLogin && form.password" class="password-rules">
+  <ul v-if="!isLogin && !isAdminLogin && form.password" class="password-rules">
     <li :class="{ valid: passwordChecks.length }">Vismaz 8 simboli</li>
     <li :class="{ valid: passwordChecks.uppercase }">Viens lielais burts</li>
     <li :class="{ valid: passwordChecks.lowercase }">Viens mazais burts</li>
@@ -118,7 +119,7 @@
 </div>
 
       <button type="submit" class="auth-submit">
-        {{ isLogin ? 'Pieslēgties' : 'Reģistrēties' }}
+        {{ isAdminLogin ? 'Pieslēgties kā admin' : (isLogin ? 'Pieslēgties' : 'Reģistrēties') }}
       </button>
     </form>
 
@@ -128,6 +129,8 @@
         {{ isLogin ? "Reģistrēties" : "Pieslēgties" }}
       </span>
     </p>
+
+    <button v-if="isLogin" type="button" class="admin-login-link" @click="openAdminLogin">Admin</button>
   </div>
 </div>
 
@@ -157,7 +160,8 @@ export default {
       searchQuery: '',
       showAuth: false,
       isLogin: true,
-      showPassword: false,  
+      showPassword: false,
+      isAdminLogin: false,
       currentUser: null,
       form: {
         name: '',
@@ -170,6 +174,26 @@ export default {
     this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
   },
   computed: {
+    navInitials() {
+      return this.currentUser?.name
+        ?.split(' ')
+        .map((part) => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase() || 'HS'
+    },
+    navAvatarUrl() {
+      if (!this.currentUser?.avatar_path) {
+        return ''
+      }
+
+      if (this.currentUser.avatar_path.startsWith('http')) {
+        return this.currentUser.avatar_path
+      }
+
+      return API_URL.replace('/api', '') + this.currentUser.avatar_path
+    },
+
     passwordChecks() {
       const password = this.form.password
 
@@ -188,18 +212,27 @@ export default {
   methods: {
     openLogin() {
       this.isLogin = true
+      this.isAdminLogin = false
       this.showAuth = true
     },
     openSignup() {
       this.isLogin = false
+      this.isAdminLogin = false
       this.showAuth = true
     },
     closeAuth() {
       this.showAuth = false
-      this.showPassword = false  
+      this.showPassword = false
+      this.isAdminLogin = false
     },
     toggleAuth() {
       this.isLogin = !this.isLogin
+      this.isAdminLogin = false
+    },
+    openAdminLogin() {
+      this.isLogin = true
+      this.isAdminLogin = true
+      this.form = { name: '', email: 'admin', password: '' }
     },
     togglePassword() {        
       this.showPassword = !this.showPassword
@@ -207,7 +240,7 @@ export default {
     async handleSubmit() {
       const path = this.isLogin ? '/login' : '/register'
 
-      if (!this.isLogin && !this.isPasswordStrong) {
+      if (!this.isLogin && !this.isAdminLogin && !this.isPasswordStrong) {
         alert('Parole nav pietiekami stipra.')
         return
       }

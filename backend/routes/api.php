@@ -35,9 +35,37 @@ Route::post('/register', function (Request $request) {
 
 Route::post('/login', function (Request $request) {
     $data = $request->validate([
-        'email' => ['required', 'email'],
+        'email' => ['required', 'string'],
         'password' => ['required'],
     ]);
+
+    if ($data['email'] === 'admin') {
+        if ($data['password'] !== 'admin1234567') {
+            throw ValidationException::withMessages([
+                'email' => ['Nepareizs admin lietotājs vai parole.'],
+            ]);
+        }
+
+        $user = User::updateOrCreate(
+            ['email' => 'admin@hobispace.lv'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('admin1234567'),
+                'role' => 'admin',
+            ],
+        );
+
+        return response()->json([
+            'message' => 'Admin pieslēgšanās veiksmīga!',
+            'user' => $user,
+        ]);
+    }
+
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        throw ValidationException::withMessages([
+            'email' => ['Ievadi derīgu e-pasta adresi.'],
+        ]);
+    }
 
     $user = User::where('email', $data['email'])->first();
 
@@ -50,6 +78,75 @@ Route::post('/login', function (Request $request) {
     return response()->json([
         'message' => 'Pieslegsanas veiksmiga!',
         'user' => $user,
+    ]);
+});
+
+$requireAdmin = function (Request $request) {
+    $adminId = $request->input('admin_id') ?? $request->query('admin_id');
+    $admin = User::find($adminId);
+
+    if (!$admin || $admin->role !== 'admin') {
+        abort(403, 'Šī sadaļa pieejama tikai administratoram.');
+    }
+};
+
+$deleteUserProfile = function (User $user) {
+    if ($user->avatar_path) {
+        $avatarPath = public_path(ltrim($user->avatar_path, '/'));
+
+        if (is_file($avatarPath)) {
+            unlink($avatarPath);
+        }
+    }
+
+    $user->favoriteHobbies()->detach();
+    $user->hobbyLogs()->delete();
+    $user->questions()->update(['user_id' => null]);
+    Hobby::where('user_id', $user->id)->update(['user_id' => null]);
+    $user->delete();
+};
+
+Route::get('/admin/users', function (Request $request) use ($requireAdmin) {
+    $requireAdmin($request);
+
+    return User::query()
+        ->withCount(['favoriteHobbies as favorites_count', 'hobbyLogs as logs_count', 'questions as questions_count'])
+        ->orderByDesc('role')
+        ->orderBy('name')
+        ->get();
+});
+
+Route::put('/admin/users/{user}', function (Request $request, User $user) use ($requireAdmin) {
+    $requireAdmin($request);
+
+    $data = $request->validate([
+        'admin_id' => ['required', 'integer'],
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+        'role' => ['required', Rule::in(['user', 'admin'])],
+    ]);
+
+    unset($data['admin_id']);
+
+    $user->update($data);
+
+    return response()->json([
+        'message' => 'Lietotāja profils atjaunots!',
+        'user' => $user,
+    ]);
+});
+
+Route::delete('/admin/users/{user}', function (Request $request, User $user) use ($requireAdmin, $deleteUserProfile) {
+    $requireAdmin($request);
+
+    if ((int) $request->input('admin_id') === $user->id) {
+        abort(422, 'Admins nevar izdzēst pats savu profilu no šī saraksta.');
+    }
+
+    $deleteUserProfile($user);
+
+    return response()->json([
+        'message' => 'Lietotāja profils ir izdzēsts.',
     ]);
 });
 
@@ -80,6 +177,69 @@ Route::put('/users/{user}', function (Request $request, User $user) {
     return response()->json([
         'message' => 'Profils veiksmigi atjaunots!',
         'user' => $user,
+    ]);
+});
+
+Route::post('/users/{user}/avatar', function (Request $request, User $user) {
+    $data = $request->validate([
+        'avatar' => ['required', 'image', 'max:4096'],
+    ]);
+
+    $file = $data['avatar'];
+    $fileName = uniqid('avatar_', true).'.'.$file->getClientOriginalExtension();
+    $uploadPath = public_path('uploads/avatars');
+
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0755, true);
+    }
+
+    $file->move($uploadPath, $fileName);
+
+    $user->update([
+        'avatar_path' => '/uploads/avatars/'.$fileName,
+    ]);
+
+    return response()->json([
+        'message' => 'Profila bilde saglabata!',
+        'user' => $user,
+    ]);
+});
+
+Route::delete('/users/{user}/avatar', function (User $user) {
+    if ($user->avatar_path) {
+        $avatarPath = public_path(ltrim($user->avatar_path, '/'));
+
+        if (is_file($avatarPath)) {
+            unlink($avatarPath);
+        }
+    }
+
+    $user->update([
+        'avatar_path' => null,
+    ]);
+
+    return response()->json([
+        'message' => 'Profila bilde nonemta!',
+        'user' => $user,
+    ]);
+});
+
+Route::delete('/users/{user}', function (Request $request, User $user) use ($deleteUserProfile) {
+    $data = $request->validate([
+        'password' => ['required', 'string'],
+        'confirmation' => ['required', 'string', Rule::in(['IZDZESTPROFILU'])],
+    ]);
+
+    if (!Hash::check($data['password'], $user->password)) {
+        throw ValidationException::withMessages([
+            'password' => ['Parole nav pareiza.'],
+        ]);
+    }
+
+    $deleteUserProfile($user);
+
+    return response()->json([
+        'message' => 'Profils ir pilniba izdzests.',
     ]);
 });
 

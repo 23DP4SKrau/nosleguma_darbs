@@ -14,7 +14,6 @@
             <li><router-link to="/about">Par mums</router-link></li>
             <li><router-link to="/hobbies">Hobiji</router-link></li>
             <li><router-link to="/contact">Kontakti</router-link></li>
-            <li><router-link to="/profile">Profils</router-link></li>
           </ul>
         </nav>
       </div>
@@ -29,8 +28,10 @@
 
         <div class="auth-buttons">
           <template v-if="currentUser">
-            <router-link class="login-btn" to="/profile">Mans profils</router-link>
-            <button class="signup-btn" @click="logout">Iziet</button>
+            <router-link class="profile-nav-link" to="/profile" aria-label="Mans profils">
+              <img v-if="navAvatarUrl" :src="navAvatarUrl" alt="" />
+              <span v-else>{{ navInitials }}</span>
+            </router-link>
           </template>
           <template v-else>
             <button class="login-btn" @click="openLogin">Pieslēgties</button>
@@ -42,10 +43,16 @@
 
     <!-- About Hero Section -->
     <section class="about-hero">
-      <div class="about-hero-content">
-        <p class="collection-label">par mums</p>
-        <h1>Par HobiSpace</h1>
-        <p class="hero-subtitle">Mēs esam radoši cilvēki, kurus vieno intereses par vairākiem hobijiem. Šī mājaslapa apkopo informāciju, idejas un pieredzi gan iesācējiem, gan pieredzējušiem entuziastiem.</p>
+      <div class="about-hero-layout">
+        <img src="@/assets/zenn.png" alt="Radošs hobiju attēls" class="about-side-image about-side-image-left" />
+
+        <div class="about-hero-content">
+          <p class="collection-label">par mums</p>
+          <h1>Par HobiSpace</h1>
+          <p class="hero-subtitle">Mēs, radoši cilvēki ar vēlmi brīvo laiku pavadīt nevis telefonos, bet jēgpilni un interesanti, izdomājām izveidot mājaslapu, kas apkopo informāciju par lietotāju hobijiem, idejām, pieredzi un rekordiem. Šī mājaslapa ir paredzēta jebkura vecuma cilvēkiem, galvenais, lai esi mērķtiecīgs un tev patīk pavadīt laiku dažādos un aizraujošos veidos.</p>
+        </div>
+
+        <img src="@/assets/zen.png" alt="Mierīgs hobiju attēls" class="about-side-image about-side-image-right" />
       </div>
     </section>
 
@@ -54,9 +61,8 @@
       <div class="container">
         <h2>Mūsu misija</h2>
         <p>
-          HobiSpace tic, ka hobiji ir gan laika pavadīšana interesantā veidā, gan ceļš uz pašatklāšanu, 
-          radošumu un savienojumu ar citiem. Mūsu misija ir ļaut HobiSpace lietotājiem atcerēties savus piedzīvojumus. Šeit cilvēki var izpētīt dažādus hobijus, 
-          dalīties savās aizrautībās un iedvesmot citus sekot savām interesēm.
+          Mēs ticam, ka hobiji ir ceļš uz pašatklāšanu, kā arī laika pavadīšanu interesantā veidā. Atrodot savus īstos hobijus, tev ir iespēja ar citiem savienoties un izpaust savu radošumu. Tieši mūsu misija ir ļaut HobiSpace lietotājiem atcerēties savus piedzīvojumus.
+          Mēs vēlamies, lai HobiSpace kļūtu par vietu, kur cilvēki var dalīties ar saviem hobijiem, sasniegumiem un iedvesmot citus. Mēs esam šeit, lai atbalstītu un iedrošinātu ikvienu atrast savu aizraušanos un izbaudīt to pilnībā.
         </p>
       </div>
     </section>
@@ -64,7 +70,7 @@
     <!-- What We Offer -->
     <section class="offers-section">
       <div class="container">
-        <h2>Ko mēs piedāvājam</h2>
+        <h2>Mūsu piedāvājumi</h2>
         <div class="offers-grid">
           <div class="offer-card">
             <div class="offer-icon"></div>
@@ -73,13 +79,13 @@
           </div>
           <div class="offer-card">
             <div class="offer-icon"></div>
-            <h3>Dalies ar savu hobiju</h3>
-            <p>Demonstrējiet savus hobiju projektus, sasniegumus un radošos darbus ar mums.</p>
+            <h3>Pievieno hobijus</h3>
+            <p>Pievienojiet jaunus hobijus, kuri vēl nav minēti, lai paplašinātu mūsu hobiju klāstu.</p>
           </div>
           <div class="offer-card">
             <div class="offer-icon"></div>
             <h3>Atzīmē savus panākumus</h3>
-            <p>Pieraksti ko tu esi darījies un ieguvis kamēr nodarbojies ar savu hobiju.</p>
+            <p>Pieraksti, ko tu esi darījis un ieguvis, kamēr nodarbojies ar savu hobiju.</p>
           </div>
         </div>
       </div>
@@ -89,19 +95,19 @@
     <!-- Auth Modal -->
     <div v-if="showAuth" class="auth-overlay" @click.self="closeAuth">
       <div class="auth-modal">
-        <button class="close-btn" @click="closeAuth">×</button>
+        <button class="close-btn" @click="closeAuth">x</button>
 
-        <h2>{{ isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu' }}</h2>
+        <h2>{{ isAdminLogin ? 'Admin pieslēgšanās' : (isLogin ? 'Pieslēgties HobiSpace' : 'Izveidot kontu') }}</h2>
 
         <form @submit.prevent="handleSubmit">
-          <div v-if="!isLogin" class="form-group">
+          <div v-if="!isLogin && !isAdminLogin" class="form-group">
             <label>Pilns vārds</label>
             <input type="text" v-model="form.name" required />
           </div>
 
           <div class="form-group">
-            <label>E-pasts</label>
-            <input type="email" v-model="form.email" required />
+            <label>{{ isAdminLogin ? 'Admin lietotājs' : 'E-pasts' }}</label>
+            <input :type="isAdminLogin ? 'text' : 'email'" v-model="form.email" required />
           </div>
 
           <div class="form-group password-group">
@@ -123,7 +129,7 @@
                 <span v-else aria-hidden="true">&#x1F441;</span>
               </button>
             </div>
-            <ul v-if="!isLogin && form.password" class="password-rules">
+            <ul v-if="!isLogin && !isAdminLogin && form.password" class="password-rules">
               <li :class="{ valid: passwordChecks.length }">Vismaz 8 simboli</li>
               <li :class="{ valid: passwordChecks.uppercase }">Viens lielais burts</li>
               <li :class="{ valid: passwordChecks.lowercase }">Viens mazais burts</li>
@@ -133,7 +139,7 @@
           </div>
 
           <button type="submit" class="auth-submit">
-            {{ isLogin ? 'Pieslēgties' : 'Reģistrēties' }}
+            {{ isAdminLogin ? 'Pieslēgties kā admin' : (isLogin ? 'Pieslēgties' : 'Reģistrēties') }}
           </button>
         </form>
 
@@ -143,6 +149,8 @@
             {{ isLogin ? "Reģistrēties" : "Pieslēgties" }}
           </span>
         </p>
+
+        <button v-if="isLogin" type="button" class="admin-login-link" @click="openAdminLogin">Admin</button>
       </div>
     </div>
 
@@ -176,7 +184,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© {{ new Date().getFullYear() }} HobiSpace. All rights reserved.</p>
+        <p>&copy; {{ new Date().getFullYear() }} HobiSpace. Visas tiesības aizsargātas.</p>
       </div>
     </footer>
 </template>
@@ -191,7 +199,8 @@ export default {
       searchQuery: '',
       showAuth: false,
       isLogin: true,
-      showPassword: false,  
+      showPassword: false,
+      isAdminLogin: false,
       currentUser: null,
       form: {
         name: '',
@@ -204,6 +213,26 @@ export default {
     this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
   },
   computed: {
+    navInitials() {
+      return this.currentUser?.name
+        ?.split(' ')
+        .map((part) => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase() || 'HS'
+    },
+    navAvatarUrl() {
+      if (!this.currentUser?.avatar_path) {
+        return ''
+      }
+
+      if (this.currentUser.avatar_path.startsWith('http')) {
+        return this.currentUser.avatar_path
+      }
+
+      return API_URL.replace('/api', '') + this.currentUser.avatar_path
+    },
+
     passwordChecks() {
       const password = this.form.password
 
@@ -222,18 +251,27 @@ export default {
   methods: {
     openLogin() {
       this.isLogin = true
+      this.isAdminLogin = false
       this.showAuth = true
     },
     openSignup() {
       this.isLogin = false
+      this.isAdminLogin = false
       this.showAuth = true
     },
     closeAuth() {
       this.showAuth = false
-      this.showPassword = false  
+      this.showPassword = false
+      this.isAdminLogin = false
     },
     toggleAuth() {
       this.isLogin = !this.isLogin
+      this.isAdminLogin = false
+    },
+    openAdminLogin() {
+      this.isLogin = true
+      this.isAdminLogin = true
+      this.form = { name: '', email: 'admin', password: '' }
     },
     togglePassword() {        
       this.showPassword = !this.showPassword
@@ -241,7 +279,7 @@ export default {
     async handleSubmit() {
       const path = this.isLogin ? '/login' : '/register'
 
-      if (!this.isLogin && !this.isPasswordStrong) {
+      if (!this.isLogin && !this.isAdminLogin && !this.isPasswordStrong) {
         alert('Parole nav pietiekami stipra.')
         return
       }
@@ -296,10 +334,50 @@ export default {
   justify-content: center;
 }
 
+.about-hero-layout {
+  width: min(1180px, 100%);
+  display: grid;
+  grid-template-columns: minmax(160px, 0.7fr) minmax(320px, 1.25fr) minmax(160px, 0.7fr);
+  align-items: center;
+  gap: 2rem;
+}
+
+.about-side-image {
+  width: 100%;
+  max-width: 260px;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none;
+  mix-blend-mode: multiply;
+  animation: heroFloat 5s ease-in-out infinite;
+}
+
+.about-side-image-left {
+  justify-self: end;
+}
+
+.about-side-image-right {
+  justify-self: start;
+  max-width: 255px;
+  max-height: 255px;
+  animation-delay: 1.2s;
+}
+
 .about-hero-content h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
   font-weight: 700;
+}
+
+.about-hero-content .collection-label {
+  margin: 0 0 0.75rem;
+  color: #705949;
+  font-size: 1rem !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 1 !important;
+  line-height: 1.2 !important;
 }
 
 .about-hero-content p {
@@ -441,6 +519,21 @@ export default {
   .about-hero {
     padding: 3.5rem 1rem;
     min-height: auto;
+  }
+
+  .about-hero-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .about-side-image {
+    max-width: 190px;
+    max-height: 190px;
+  }
+
+  .about-side-image-left,
+  .about-side-image-right {
+    justify-self: center;
   }
 
   .about-hero-content h1 {

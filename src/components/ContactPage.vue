@@ -13,7 +13,6 @@
             <li><router-link to="/about">Par mums</router-link></li>
             <li><router-link to="/hobbies">Hobiji</router-link></li>
             <li><router-link to="/contact">Kontakti</router-link></li>
-            <li><router-link to="/profile">Profils</router-link></li>
           </ul>
         </nav>
       </div>
@@ -28,8 +27,10 @@
 
         <div class="auth-buttons">
           <template v-if="currentUser">
-            <router-link class="login-btn" to="/profile">Mans profils</router-link>
-            <button class="signup-btn" @click="logout">Iziet</button>
+            <router-link class="profile-nav-link" to="/profile" aria-label="Mans profils">
+              <img v-if="navAvatarUrl" :src="navAvatarUrl" alt="" />
+              <span v-else>{{ navInitials }}</span>
+            </router-link>
           </template>
           <template v-else>
             <button class="login-btn" @click="openLogin">Pieslēgties</button>
@@ -44,7 +45,7 @@
         <p class="collection-label">sazināšanās</p>
         <h1>Runājam par hobijiem</h1>
         <p>
-          Šeit lietotājs var nosūtīt jautājumu, ieteikumu vai ziņu administratoram.
+          Šeit jūs varat nosūtīt jautājumu, ieteikumu vai ziņu administratoram par kādām problēmām vai neērtībāmnpm r.
         </p>
       </section>
 
@@ -133,6 +134,27 @@ export default {
         message: '',
       },
     }
+  },
+  computed: {
+    navInitials() {
+      return this.currentUser?.name
+        ?.split(' ')
+        .map((part) => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase() || 'HS'
+    },
+    navAvatarUrl() {
+      if (!this.currentUser?.avatar_path) {
+        return ''
+      }
+
+      if (this.currentUser.avatar_path.startsWith('http')) {
+        return this.currentUser.avatar_path
+      }
+
+      return API_URL.replace('/api', '') + this.currentUser.avatar_path
+    },
   },
   mounted() {
     this.currentUser = JSON.parse(localStorage.getItem('hobispace_user') || 'null')
@@ -327,8 +349,11 @@ export default {
 .collection-label {
   margin: 0 0 0.75rem;
   color: #705949;
+  font-size: 1rem !important;
   font-weight: 700;
   text-transform: uppercase;
+  opacity: 1 !important;
+  line-height: 1.2 !important;
 }
 
 .contact-left h1 {

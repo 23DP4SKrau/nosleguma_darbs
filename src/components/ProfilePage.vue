@@ -13,7 +13,6 @@
             <li><router-link to="/about">Par mums</router-link></li>
             <li><router-link to="/hobbies">Hobiji</router-link></li>
             <li><router-link to="/contact">Kontakti</router-link></li>
-            <li><router-link to="/profile">Profils</router-link></li>
           </ul>
         </nav>
       </div>
@@ -28,8 +27,10 @@
 
         <div class="auth-buttons">
           <template v-if="currentUser">
-            <router-link class="login-btn" to="/profile">Mans profils</router-link>
-            <button class="signup-btn" @click="logout">Iziet</button>
+            <router-link class="profile-nav-link" to="/profile" aria-label="Mans profils">
+              <img v-if="navAvatarUrl" :src="navAvatarUrl" alt="" />
+              <span v-else>{{ navInitials }}</span>
+            </router-link>
           </template>
           <template v-else>
             <button class="login-btn" @click="openLogin">Pieslēgties</button>
@@ -50,13 +51,36 @@
 
     <main v-else class="profile-shell">
       <section class="profile-hero">
-        <div class="avatar" aria-hidden="true">{{ initials }}</div>
+        <div class="avatar-wrap">
+          <div class="avatar" aria-hidden="true">
+            <img v-if="avatarUrl" :src="avatarUrl" alt="" />
+            <span v-else>{{ initials }}</span>
+          </div>
+          <label class="avatar-upload">
+            Mainīt bildi
+            <input type="file" accept="image/*" @change="uploadAvatar" />
+          </label>
+          <button
+            v-if="avatarUrl"
+            type="button"
+            class="avatar-remove"
+            :disabled="isUploadingAvatar"
+            @click="removeAvatar"
+          >
+            Noņemt bildi
+          </button>
+        </div>
         <div>
           <p class="eyebrow">mans profils</p>
           <h1>{{ currentUser.name }}</h1>
           <p>{{ currentUser.email }}</p>
         </div>
-        <button type="button" class="logout-btn" @click="logout">Iziet</button>
+        <div class="profile-actions">
+          <button type="button" class="logout-btn" @click="logout">Iziet</button>
+          <button type="button" class="delete-profile-btn" @click="showDeleteProfile = true">
+            Dzēst profilu
+          </button>
+        </div>
       </section>
 
       <section class="stats-grid">
@@ -119,6 +143,53 @@
         </article>
       </section>
 
+      <section v-if="currentUser.role === 'admin'" class="admin-section">
+        <div class="section-heading">
+          <p class="eyebrow">admin</p>
+          <h2>Visi lietotāju profili</h2>
+        </div>
+
+        <div v-if="adminUsers.length === 0" class="soft-empty">
+          Vēl nav citu lietotāju.
+        </div>
+
+        <div v-else class="admin-users-list">
+          <article v-for="user in adminUsers" :key="user.id" class="admin-user-card">
+            <div>
+              <span class="admin-role">{{ user.role }}</span>
+              <h3>{{ user.name }}</h3>
+              <p>{{ user.email }}</p>
+              <small>
+                Favorīti: {{ user.favorites_count }} · Ieraksti: {{ user.logs_count }} · Jautājumi: {{ user.questions_count }}
+              </small>
+            </div>
+
+            <form class="admin-user-form" @submit.prevent="updateAdminUser(user)">
+              <input v-model="adminForms[user.id].name" type="text" required maxlength="255" />
+              <input v-model="adminForms[user.id].email" type="email" required maxlength="255" />
+              <select v-model="adminForms[user.id].role" required>
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+              </select>
+              <button type="submit" :disabled="adminSavingUserId === user.id">
+                {{ adminSavingUserId === user.id ? 'Saglabā...' : 'Saglabāt' }}
+              </button>
+              <button
+                type="button"
+                class="admin-delete-user-btn"
+                :disabled="adminDeletingUserId === user.id || user.id === currentUser.id"
+                @click="deleteAdminUser(user)"
+              >
+                {{ adminDeletingUserId === user.id ? 'Dzēš...' : 'Dzēst profilu' }}
+              </button>
+            </form>
+          </article>
+        </div>
+
+        <p v-if="adminMessage" class="success-message">{{ adminMessage }}</p>
+        <p v-if="adminError" class="error-message">{{ adminError }}</p>
+      </section>
+
       <section class="favorites-section">
         <div class="section-heading">
           <p class="eyebrow">kolekcija</p>
@@ -131,7 +202,6 @@
 
         <div v-else class="favorites-grid">
           <article v-for="hobby in favorites" :key="hobby.id" class="favorite-card">
-            <div class="favorite-icon">{{ getHobbyIcon(hobby.name) }}</div>
             <div class="favorite-content">
               <span>{{ hobby.category?.name }}</span>
               <h3>{{ hobby.name }}</h3>
@@ -161,6 +231,40 @@
         </div>
       </section>
     </main>
+
+    <div v-if="showDeleteProfile" class="delete-overlay" @click.self="closeDeleteProfile">
+      <div class="delete-modal">
+        <button type="button" class="close-btn" @click="closeDeleteProfile">x</button>
+        <p class="eyebrow">drošības pārbaude</p>
+        <h2>Dzēst profilu?</h2>
+        <p class="delete-warning">
+          Šī darbība neatgriezeniski izdzēsīs tavu kontu no datubāzes. Lai turpinātu, ievadi paroli un tekstu IZDZESTPROFILU.
+        </p>
+
+        <form class="delete-form" @submit.prevent="deleteProfile">
+          <label>
+            Parole
+            <input v-model="deleteProfileForm.password" type="password" required />
+          </label>
+
+          <label>
+            Apstiprinājuma teksts
+            <input
+              v-model="deleteProfileForm.confirmation"
+              type="text"
+              required
+              placeholder="IZDZESTPROFILU"
+            />
+          </label>
+
+          <button type="submit" :disabled="isDeletingProfile">
+            {{ isDeletingProfile ? 'Dzēš...' : 'Dzēst profilu pavisam' }}
+          </button>
+        </form>
+
+        <p v-if="deleteProfileError" class="error-message">{{ deleteProfileError }}</p>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="footer-container">
@@ -216,13 +320,47 @@ export default {
         name: '',
         email: '',
       },
+      adminUsers: [],
+      adminForms: {},
+      adminMessage: '',
+      adminError: '',
+      adminSavingUserId: null,
+      adminDeletingUserId: null,
       isSaving: false,
+      isUploadingAvatar: false,
+      isDeletingProfile: false,
+      showDeleteProfile: false,
+      deleteProfileError: '',
+      deleteProfileForm: {
+        password: '',
+        confirmation: '',
+      },
       successMessage: '',
       errorMessage: '',
       isDarkMode: false,
     }
   },
   computed: {
+    navInitials() {
+      return this.currentUser?.name
+        ?.split(' ')
+        .map((part) => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase() || 'HS'
+    },
+    navAvatarUrl() {
+      if (!this.currentUser?.avatar_path) {
+        return ''
+      }
+
+      if (this.currentUser.avatar_path.startsWith('http')) {
+        return this.currentUser.avatar_path
+      }
+
+      return API_URL.replace('/api', '') + this.currentUser.avatar_path
+    },
+
     initials() {
       return this.currentUser?.name
         ?.split(' ')
@@ -230,6 +368,17 @@ export default {
         .join('')
         .slice(0, 2)
         .toUpperCase() || 'HS'
+    },
+    avatarUrl() {
+      if (!this.currentUser?.avatar_path) {
+        return ''
+      }
+
+      if (this.currentUser.avatar_path.startsWith('http')) {
+        return this.currentUser.avatar_path
+      }
+
+      return `${API_URL.replace('/api', '')}${this.currentUser.avatar_path}`
     },
   },
   mounted() {
@@ -285,9 +434,82 @@ export default {
       this.stats = data.stats
       this.recentLogs = data.recent_logs
       localStorage.setItem('hobispace_user', JSON.stringify(data.user))
+
+      if (this.currentUser.role === 'admin') {
+        this.loadAdminUsers()
+      }
     },
     async loadFavorites() {
       this.favorites = await this.request(`/favorites/${this.currentUser.id}`)
+    },
+    async loadAdminUsers() {
+      this.adminUsers = await this.request(`/admin/users?admin_id=${this.currentUser.id}`)
+      this.adminForms = this.adminUsers.reduce((forms, user) => {
+        forms[user.id] = {
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        }
+        return forms
+      }, {})
+    },
+    async updateAdminUser(user) {
+      this.adminSavingUserId = user.id
+      this.adminMessage = ''
+      this.adminError = ''
+
+      try {
+        const data = await this.request(`/admin/users/${user.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            ...this.adminForms[user.id],
+            admin_id: this.currentUser.id,
+          }),
+        })
+
+        this.adminMessage = data.message
+        await this.loadAdminUsers()
+
+        if (user.id === this.currentUser.id) {
+          this.currentUser = data.user
+          localStorage.setItem('hobispace_user', JSON.stringify(data.user))
+        }
+      } catch (error) {
+        this.adminError = error.message
+      } finally {
+        this.adminSavingUserId = null
+      }
+    },
+    async deleteAdminUser(user) {
+      if (user.id === this.currentUser.id) {
+        this.adminError = 'Tu nevari izdzēst pats savu admin profilu no šī saraksta.'
+        return
+      }
+
+      if (!confirm(`Vai tiešām dzēst lietotāja "${user.name}" profilu?`)) {
+        return
+      }
+
+      this.adminDeletingUserId = user.id
+      this.adminMessage = ''
+      this.adminError = ''
+
+      try {
+        const data = await this.request(`/admin/users/${user.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify({
+            admin_id: this.currentUser.id,
+          }),
+        })
+
+        this.adminMessage = data.message
+        await this.loadAdminUsers()
+        await this.loadProfile()
+      } catch (error) {
+        this.adminError = error.message
+      } finally {
+        this.adminDeletingUserId = null
+      }
     },
     async updateProfile() {
       this.isSaving = true
@@ -309,6 +531,111 @@ export default {
         this.isSaving = false
       }
     },
+    async uploadAvatar(event) {
+      const file = event.target.files?.[0]
+
+      if (!file) {
+        return
+      }
+
+      this.isUploadingAvatar = true
+      this.successMessage = ''
+      this.errorMessage = ''
+
+      const formData = new FormData()
+      formData.append('avatar', file)
+
+      try {
+        const response = await fetch(`${API_URL}/users/${this.currentUser.id}/avatar`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+          },
+          body: formData,
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Profila bildi neizdevās saglabāt.')
+        }
+
+        this.currentUser = data.user
+        localStorage.setItem('hobispace_user', JSON.stringify(data.user))
+        this.successMessage = data.message
+      } catch (error) {
+        this.errorMessage = error.message
+      } finally {
+        this.isUploadingAvatar = false
+        event.target.value = ''
+      }
+    },
+    async removeAvatar() {
+      this.isUploadingAvatar = true
+      this.successMessage = ''
+      this.errorMessage = ''
+
+      try {
+        const response = await fetch(`${API_URL}/users/${this.currentUser.id}/avatar`, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+          },
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Profila bildi neizdevās noņemt.')
+        }
+
+        this.currentUser = data.user
+        localStorage.setItem('hobispace_user', JSON.stringify(data.user))
+        this.successMessage = data.message
+      } catch (error) {
+        this.errorMessage = error.message
+      } finally {
+        this.isUploadingAvatar = false
+      }
+    },
+    closeDeleteProfile() {
+      this.showDeleteProfile = false
+      this.deleteProfileError = ''
+      this.deleteProfileForm = {
+        password: '',
+        confirmation: '',
+      }
+    },
+    async deleteProfile() {
+      this.isDeletingProfile = true
+      this.deleteProfileError = ''
+
+      try {
+        const response = await fetch(`${API_URL}/users/${this.currentUser.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(this.deleteProfileForm),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Profilu neizdevās izdzēst.')
+        }
+
+        localStorage.removeItem('hobispace_user')
+        this.currentUser = null
+        this.closeDeleteProfile()
+        this.$router.push('/hobbies')
+      } catch (error) {
+        this.deleteProfileError = error.message
+      } finally {
+        this.isDeletingProfile = false
+      }
+    },
     async removeFavorite(hobby) {
       await this.request('/favorites/toggle', {
         method: 'POST',
@@ -327,30 +654,7 @@ export default {
     },
     formatDate(value) {
       return new Intl.DateTimeFormat('lv-LV').format(new Date(value))
-    },
-    getHobbyIcon(name) {
-      const icons = {
-        Fotografesana: '📷',
-        Skriesana: '🏃',
-        Dejosana: '💃',
-        Dziedasana: '🎤',
-        Susana: '🧵',
-        Lasisana: '📚',
-        Fitness: '💪',
-        Gleznosana: '🎨',
-        Rakstisana: '✍',
-        Ritenbrauksana: '🚲',
-        Peldesana: '🏊',
-        Muzika: '🎵',
-        Makskeresana: '🎣',
-        Videospele: '🎮',
-        'Ediena gatavosana': '🍳',
-        Cepsana: '🧁',
-        Rokdarbi: '🛠',
-      }
-
-      return icons[name] || '✨'
-    },
+    }
   },
 }
 </script>
@@ -510,16 +814,68 @@ export default {
   background: #f6dfce;
 }
 
+.avatar-wrap {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+}
+
 .avatar {
   width: 92px;
   height: 92px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
+  border-radius: 50%;
   background: #BC4527;
   color: #FDF8F0;
   font-size: 2rem;
   font-weight: 900;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.avatar-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #BC4527;
+  border: 1px solid #d8c8bc;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.avatar-upload input {
+  display: none;
+}
+
+.avatar-remove {
+  min-height: 32px;
+  padding: 0.4rem 0.7rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #9b1c1c;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.avatar-remove:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .eyebrow {
@@ -541,6 +897,12 @@ export default {
   font-weight: 700;
 }
 
+.profile-hero .eyebrow {
+  font-size: 1.35rem;
+  letter-spacing: 0;
+  margin-bottom: 0.55rem;
+}
+
 .logout-btn,
 .profile-form button,
 .favorite-card button {
@@ -552,9 +914,107 @@ export default {
   cursor: pointer;
 }
 
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .logout-btn {
   background: #ffffff;
   color: #9b1c1c;
+}
+
+.delete-profile-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  background: #9b1c1c;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.delete-modal {
+  position: relative;
+  width: min(100%, 460px);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f1f1f;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+}
+
+.delete-modal .close-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  border: 0;
+  background: transparent;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.delete-modal h2 {
+  margin: 0 0 0.75rem;
+}
+
+.delete-warning {
+  margin: 0 0 1rem;
+  color: #62554e;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.delete-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.delete-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 800;
+}
+
+.delete-form input {
+  width: 100%;
+  border: 1px solid #d8c8bc;
+  border-radius: 8px;
+  padding: 0.85rem 0.95rem;
+  font: inherit;
+  background: #fffaf5;
+}
+
+.delete-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background: #9b1c1c;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.delete-form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
 
 .stats-grid {
@@ -598,6 +1058,87 @@ export default {
 .profile-panel,
 .favorites-section {
   padding: 1.25rem;
+}
+
+.admin-section {
+  margin-top: 1rem;
+  padding: 1.25rem;
+  border: 1px solid #eadfd5;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-users-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-user-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
+  border: 1px solid #eadfd5;
+  border-radius: 8px;
+  background: #fffaf5;
+}
+
+.admin-user-card h3 {
+  margin: 0.25rem 0;
+}
+
+.admin-user-card p,
+.admin-user-card small {
+  color: #62554e;
+  font-weight: 700;
+}
+
+.admin-role {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #f6dfce;
+  color: #BC4527;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-user-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.admin-user-form input,
+.admin-user-form select {
+  width: 100%;
+  border: 1px solid #d8c8bc;
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  background: #ffffff;
+}
+
+.admin-user-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  background: #BC4527;
+  color: #FDF8F0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.admin-user-form .admin-delete-user-btn {
+  background: #9b1c1c;
+}
+
+.admin-user-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .section-heading h2 {
@@ -737,23 +1278,10 @@ export default {
 }
 
 .favorite-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
   padding: 1rem;
   border: 1px solid #eadfd5;
   border-radius: 8px;
   background: #fffaf5;
-}
-
-.favorite-icon {
-  width: 60px;
-  height: 60px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: #F6DFCE;
-  font-size: 1.8rem;
 }
 
 .favorite-content span {
@@ -850,23 +1378,23 @@ export default {
     padding: 1.5rem;
   }
 
+  .profile-actions {
+    justify-content: center;
+  }
+
   .stats-grid,
   .content-grid,
-  .favorites-grid {
+  .favorites-grid,
+  .admin-user-card,
+  .admin-user-form {
     grid-template-columns: 1fr;
   }
 
   .profile-hero h1 {
     font-size: 2rem;
   }
-
   .favorite-card {
-    grid-template-columns: 1fr;
     text-align: center;
-  }
-
-  .favorite-icon {
-    margin: 0 auto;
   }
 }
 
