@@ -190,6 +190,37 @@
         <p v-if="adminError" class="error-message">{{ adminError }}</p>
       </section>
 
+      <section v-if="currentUser.role === 'admin'" class="admin-section admin-questions-section">
+        <div class="section-heading">
+          <p class="eyebrow">kontakti</p>
+          <h2>Iesniegtie jautājumi</h2>
+        </div>
+
+        <div v-if="adminQuestions.length === 0" class="soft-empty">
+          Vēl nav iesniegtu jautājumu.
+        </div>
+
+        <div v-else class="admin-questions-list">
+          <article v-for="question in adminQuestions" :key="question.id" class="admin-question-card">
+            <div class="admin-question-head">
+              <div>
+                <span class="admin-role">{{ question.status || 'jauns' }}</span>
+                <h3>{{ question.subject }}</h3>
+              </div>
+              <time>{{ formatDate(question.created_at) }}</time>
+            </div>
+
+            <p class="admin-question-message">{{ question.message }}</p>
+
+            <div class="admin-question-meta">
+              <span>{{ question.name }}</span>
+              <a :href="`mailto:${question.email}`">{{ question.email }}</a>
+              <span v-if="question.user">Konts: {{ question.user.name }}</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="favorites-section">
         <div class="section-heading">
           <p class="eyebrow">kolekcija</p>
@@ -322,6 +353,7 @@ export default {
       },
       adminUsers: [],
       adminForms: {},
+      adminQuestions: [],
       adminMessage: '',
       adminError: '',
       adminSavingUserId: null,
@@ -437,6 +469,7 @@ export default {
 
       if (this.currentUser.role === 'admin') {
         this.loadAdminUsers()
+        this.loadAdminQuestions()
       }
     },
     async loadFavorites() {
@@ -452,6 +485,9 @@ export default {
         }
         return forms
       }, {})
+    },
+    async loadAdminQuestions() {
+      this.adminQuestions = await this.request('/user-questions')
     },
     async updateAdminUser(user) {
       this.adminSavingUserId = user.id
@@ -1139,6 +1175,59 @@ export default {
 .admin-user-form button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.admin-questions-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-question-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid #eadfd5;
+  border-radius: 8px;
+  background: #fffaf5;
+}
+
+.admin-question-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-question-head h3 {
+  margin: 0.35rem 0 0;
+}
+
+.admin-question-head time {
+  color: #62554e;
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-question-message {
+  margin: 0;
+  color: #3f332d;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.admin-question-meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  color: #62554e;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.admin-question-meta a {
+  color: #BC4527;
+  font-weight: 900;
 }
 
 .section-heading h2 {
