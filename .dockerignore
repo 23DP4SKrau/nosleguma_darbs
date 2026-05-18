@@ -1,0 +1,16 @@
+.git
+.vscode
+node_modules
+dist
+frontend
+vuetify-project
+backend/vendor
+backend/node_modules
+backend/public/uploads
+backend/storage/logs/*
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/database/database.sqlite
+backend/.env
+*.log
