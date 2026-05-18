@@ -21,10 +21,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY backend/composer.json backend/composer.lock ./
+COPY backend ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-COPY backend ./
 COPY --from=frontend /app/dist/ ./public/
 
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
