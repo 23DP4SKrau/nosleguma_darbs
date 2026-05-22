@@ -39,6 +39,39 @@
           </template>
         </div>
       </div>
+
+      <button
+        type="button"
+        class="mobile-menu-btn"
+        :class="{ active: mobileMenuOpen }"
+        :aria-expanded="mobileMenuOpen"
+        aria-label="Atvērt navigāciju"
+        @click="toggleMobileMenu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div v-if="mobileMenuOpen" class="mobile-menu">
+        <router-link to="/" @click="closeMobileMenu">Sākums</router-link>
+        <router-link to="/about" @click="closeMobileMenu">Par mums</router-link>
+        <router-link to="/hobbies" @click="closeMobileMenu">Hobiji</router-link>
+        <router-link to="/contact" @click="closeMobileMenu">Kontakti</router-link>
+
+        <div class="mobile-auth-buttons">
+          <template v-if="currentUser">
+            <router-link class="profile-nav-link" to="/profile" aria-label="Mans profils" @click="closeMobileMenu">
+              <img v-if="navAvatarUrl" :src="navAvatarUrl" alt="" />
+              <span v-else>{{ navInitials }}</span>
+            </router-link>
+          </template>
+          <template v-else>
+            <button class="login-btn" @click="openLogin(); closeMobileMenu()">Pieslēgties</button>
+            <button class="signup-btn" @click="openSignup(); closeMobileMenu()">Reģistrēties</button>
+          </template>
+        </div>
+      </div>
     </header>
 
     <!-- About Hero Section -->
@@ -197,6 +230,7 @@ export default {
   data() {
     return {
       searchQuery: '',
+      mobileMenuOpen: false,
       showAuth: false,
       isLogin: true,
       showPassword: false,
@@ -249,6 +283,12 @@ export default {
     },
   },
   methods: {
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen
+    },
+    closeMobileMenu() {
+      this.mobileMenuOpen = false
+    },
     openLogin() {
       this.isLogin = true
       this.isAdminLogin = false
