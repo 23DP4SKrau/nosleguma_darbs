@@ -44,7 +44,7 @@ XAMPP
 ```sh
 npm run dev
 ```
-Vai arī ar linku: https://noslegumadarbs-production-fdd8.up.railway.app/ 
+Vai arī izmanto linku: https://noslegumadarbs-production-fdd8.up.railway.app/ 
 ## Kontakti
 
 Ja vēlies sazināties:
